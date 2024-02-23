@@ -1,0 +1,54 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Evelyn Website</title>
+    <style type="text/css">
+        .homepagelink{
+            position:fixed;
+            top:10px;
+            right: 10px;
+         }
+    </style>
+    <style type="text/css">
+        .belowhomepage1{
+            position:fixed;
+            top:40px;
+            right: 10px;
+         }
+       </style>
+    <style type="text/css">
+        .belowhomepage2{
+            position:fixed;
+            top:70px;
+            right: 10px;
+         }
+       </style>
+</head>
+<body>
+    <div>   
+    <div class='homepagelink'><a id= "homepagelink" style="text-align: right; width:10%;  display: inline-block;" href="/">Homepage </a></div>
+    <div class="belowhomepage1"><a id="backToAuthors" style="display: none;" href="">Back to Authors</a></div>
+    <div class="belowhomepage2"><a id="backToArticles" style="display: none;" href="">Back to Articles</a></div>
+    <div id="lists">
+    <h2 id="listTitle" style="display: none">List of Authors:</h2>
+    <div style="text-align: left; width:75%; display: inline-block;">
+        <table id="userTable"></table>
+    </div>
+    <div style="text-align: left; width:75%; display: inline-block;">
+        <table id="articleTable" cellpadding=5px></table>
+    </div>
+    </div>
+    <div id="articleDisplay" style="display:none; width: 75%;"> 
+        <!-- Article Display -->
+        <h2 id="selectedArticleTitle"></h2><div id="authorBy"><h4 style="display: inline"> by </h4><h4 id="authorName" style="display: inline"></h4></div>
+        <br>
+        <br>
+        <br>
+        <p id="articleBody"></p>
+    </div>
+</div>  
+</body>
+<script src="/articles/readall.js"></script>
+</html>

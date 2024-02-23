@@ -1,0 +1,37 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Evelyn Website</title>
+    <style type="text/css">
+        .topright{
+            position:fixed;
+            top:10px;
+            right: 10px;
+         }
+    </style>
+</head>
+<body>
+    <div class='topright'><a id= "homepagelink" style="text-align: right; width:10%;  display: inline-block;" href="/">Homepage </a></div>
+    <div id="profile" style="text-align: left; width:75%; display: block;">
+    <h3 id="profileUsername"></h3>
+    <h4 id="profileBio"></h4>
+    <h5 id="profileBirthday"></h5>
+    <h5 id="profileCreatedAt"></h5>
+    </div>
+    <div id="editProfile" style="display: block;">
+        <button id="editProfileButton" style="display: none">Edit Profile</button>
+        <form id="editProfileForm" style="display: none;">
+            <label for="bio">Bio:</label>
+            <input type="textarea" id="bioForm" name="bio">
+            <br>
+            <label for="birthday">Birthday:</label>
+            <input type="date" id="birthdayForm" name="birthday">
+            <br>
+            <button type="submit">Submit Changes</button>
+        </form>
+    </div>
+</body>
+<script src="/profiles/myProfile.js"></script>
+</html>
