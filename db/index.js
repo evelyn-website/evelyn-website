@@ -5,16 +5,8 @@ const DEV_DATABASE_HOST = process.env.DEV_DATABASE_HOST
 const DEV_DATABASE_NAME = process.env.DEV_DATABASE_NAME
 const DEV_DATABASE_USER = process.env.DEV_DATABASE_USER
 const DEV_DATABASE_PASS = process.env.DEV_DATABASE_PASS
+const DB_URL = process.env.DB_URL
 
-const Sequelize = new sequelize.Sequelize(
-   DEV_DATABASE_NAME,
-   DEV_DATABASE_USER,
-   DEV_DATABASE_PASS,
-    {
-      host: DEV_DATABASE_HOST,
-      dialect: 'postgres',
-      port: '5432'
-    }
-);
+const Sequelize = new sequelize.Sequelize(DB_URL);
 
 module.exports = Sequelize;
