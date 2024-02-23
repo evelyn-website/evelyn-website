@@ -49,7 +49,6 @@ module.exports = app => {
     router.post('/login', async (req, res) => {
         try {
             const { username, password } = req.body;
-            console.log(username)
             const user = await User.findOne({ where: { username: username } })
             if (!user) {
                 return res.status(401).json({ error: 'Authentication failed' });
