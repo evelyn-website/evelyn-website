@@ -9,41 +9,41 @@ module.exports = app => {
     const users = require("../controllers/user.controller.js");
 
     // User registration
-    // router.post('/register', async (req, res) => {
-    //     try{
-    //         // Validate request
-    //         if (!req.body.username) {
-    //           res.status(400).send({
-    //             message: "Content can not be empty!"
-    //           });
-    //           return;
-    //         }
+    router.post('/register', async (req, res) => {
+        try{
+            // Validate request
+            if (!req.body.username) {
+              res.status(400).send({
+                message: "Content can not be empty!"
+              });
+              return;
+            }
 
-    //       // Create a User
-    //       const user = {
-    //           username: req.body.username,
-    //           email: req.body.email,
-    //           password: req.body.password
-    //       };
+          // Create a User
+          const user = {
+              username: req.body.username,
+              email: req.body.email,
+              password: req.body.password
+          };
       
-    //       let salt = bcrypt.genSaltSync(10);
-    //       user.password = bcrypt.hashSync(user.password, salt);
+          let salt = bcrypt.genSaltSync(10);
+          user.password = bcrypt.hashSync(user.password, salt);
           
-    //       const savedUser = await User.create(user);
-    //       // Create the userProfile alongside the User
-    //       const userProfile = await UserProfile.create({
-    //         userId: savedUser.id 
-    //       });      
+          const savedUser = await User.create(user);
+          // Create the userProfile alongside the User
+          const userProfile = await UserProfile.create({
+            userId: savedUser.id 
+          });      
 
-    //       res.send(savedUser); 
+          res.send(savedUser); 
 
-    //       }
-    //       catch (err) {
-    //         res.status(500).send({
-    //           message: err.message || "Some error occurred while creating the user."
-    //         });
-    //       }
-    // });
+          }
+          catch (err) {
+            res.status(500).send({
+              message: err.message || "Some error occurred while creating the user."
+            });
+          }
+    });
 
     // User login
     router.post('/login', async (req, res) => {
