@@ -1,31 +1,31 @@
 module.exports = app => {
     const articleViews = require("../controllers/articleView.controller.js")
-    const verifyToken = require('../middleware/authmiddleware.js');
+    const authMiddleware = require('../middleware/authmiddleware.js');
     var router = require("express").Router();
 
     // Create a new articleView
-    router.post("/", verifyToken, articleViews.create);
+    router.post("/", [authMiddleware.verifyToken], articleViews.create);
     
     // Retrieve all articleViews
-    router.get("/", verifyToken, articleViews.findAll);
+    router.get("/", [authMiddleware.verifyToken], articleViews.findAll);
 
     // Retrieve a single articleView with id
-    router.get("/:id", verifyToken, articleViews.findOne);
+    router.get("/:id", [authMiddleware.verifyToken], articleViews.findOne);
 
     // Retrieve a single articleView with userId
-    router.get("/byUserId/:userId", verifyToken, articleViews.findArticleViewsByUserId);
+    router.get("/byUserId/:userId", [authMiddleware.verifyToken], articleViews.findArticleViewsByUserId);
 
     // Retrieve a single articleView with articleId
-    router.get("/byArticleId/:articleId", verifyToken, articleViews.findArticleViewsByArticleId);
+    router.get("/byArticleId/:articleId", [authMiddleware.verifyToken], articleViews.findArticleViewsByArticleId);
 
     // Update a articleView with id
-    router.put("/:id", verifyToken, articleViews.update);
+    router.put("/:id", [authMiddleware.verifyToken], articleViews.update);
 
     // Delete a articleView with id
-    router.delete("/:id", verifyToken, articleViews.delete);
+    router.delete("/:id", [authMiddleware.verifyToken], articleViews.delete);
 
     // Delete all articleViews
-    router.delete("/", verifyToken, articleViews.deleteAll);
+    router.delete("/", [authMiddleware.verifyToken], articleViews.deleteAll);
 
     app.use('/api/articleViews', router);
 };
