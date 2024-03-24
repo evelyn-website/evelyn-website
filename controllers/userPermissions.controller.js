@@ -204,7 +204,7 @@ exports.delete = (req, res) => {
       });
   };
 
-// Delete all Article from the database.
+// Delete all userPermissions from the database.
 exports.deleteAll = (req, res) => {
     UserPermission.destroy({
       where: {},
