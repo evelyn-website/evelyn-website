@@ -1,7 +1,7 @@
 module.exports = app => {
   const users = require("../controllers/user.controller.js");
   var router = require("express").Router();
-  const verifyToken = require('../middleware/authmiddleware.js');
+  const {verifyToken} = require('../middleware/authmiddleware.js');
 
   // Create a new User
   router.post("/", verifyToken, users.create);

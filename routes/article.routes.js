@@ -1,6 +1,6 @@
 module.exports = app => {
     const articles = require("../controllers/article.controller.js");
-    const verifyToken = require('../middleware/authmiddleware.js');
+    const {verifyToken} = require('../middleware/authmiddleware.js');
     var router = require("express").Router();
   
     // Create a new Article
