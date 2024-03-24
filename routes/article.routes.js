@@ -1,6 +1,8 @@
+const { verify } = require("jsonwebtoken");
+
 module.exports = app => {
     const articles = require("../controllers/article.controller.js");
-    const verifyToken = require('../middleware/authmiddleware.js');
+    const {verifyToken, verifyAdmin} = require('../middleware/authmiddleware.js');
     var router = require("express").Router();
   
     // Create a new Article
@@ -15,17 +17,14 @@ module.exports = app => {
     // Retrieve a single Article with userId
     router.get("/byUserId/:userId", verifyToken, articles.findArticleByUserId);
 
-    // Retrieve a single Article with userId
-    router.get("/byUsername/:username", verifyToken, articles.findArticleByUsername);
-
     // Update a article with id
-    router.put("/:id", verifyToken, articles.update);
+    router.put("/:id", verifyAdmin, articles.update);
   
     // Delete a article with id
-    router.delete("/:id", verifyToken, articles.delete);
+    router.delete("/:id", verifyAdmin, articles.delete);
   
     // Delete all articles
-    router.delete("/", verifyToken, articles.deleteAll);
+    router.delete("/", verifyAdmin, articles.deleteAll);
   
     app.use('/api/articles', verifyToken, router);
   };

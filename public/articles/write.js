@@ -76,11 +76,6 @@ writeForm.addEventListener("submit", async (event) => {
         });
 });
 
-async function getUserIdFromUsername(username) {
-    const response = await fetch(`/api/users/byUsername/${username}`);
-    const user = await response.json();
-    return user.id
-}
 
 async function postData(url = "", data = {}) {
     const response = await fetch(url, {

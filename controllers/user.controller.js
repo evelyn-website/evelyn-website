@@ -5,6 +5,7 @@ const Op = require('../db')
 const bcrypt = require('bcrypt')
 const jwt = require ('jsonwebtoken')
 const { restart } = require('nodemon');
+const UserPermission = require('../models/userPermission.model');
 
 const saltRounds = 10;
 
@@ -35,6 +36,11 @@ exports.create = async (req, res) => {
     const userProfile = await UserProfile.create({
       userId: savedUser.id 
     });
+
+    const userPermission = await UserPermission.create({
+      userId: savedUser.id,
+      permissions: {}
+    })
 
     res.send(savedUser); 
 

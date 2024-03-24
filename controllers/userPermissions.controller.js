@@ -3,9 +3,8 @@ const Op = require('../db')
 const { restart } = require('nodemon');
 const users = require("./user.controller.js");
 const User = db.users
-const UserProfile = db.userProfiles
 
-// Create and Save a new userProfile
+// Create and Save a new userPermission
 exports.create = (req, res) => {
     // Validate request
     if (!req.body.userId) {
@@ -14,78 +13,80 @@ exports.create = (req, res) => {
         });
         return;
       }
+    if (!req.body.permissions) {
+        permSet: {}
+    }
 
-    // Create a userProfile
-    const userProfile = {
+    // Create a userPermission
+    const userPermission = {
         userId: req.body.userId,
-        bio: req.body.bio,
-        birthday: req.body.birthday
+        permissions: permSet
     };
-    // Save userProfile in the database
-    UserProfile.create(userProfile)
+    // Save userPermission in the database
+    UserPermission.create(userPermission)
       .then(data => {
         res.send(data);
       })
       .catch(err => {
         res.status(500).send({
           message:
-            err.message || "Some error occurred while creating the userProfile."
+            err.message || "Some error occurred while creating the userPermission."
         });
       });
   };
 
-// Retrieve all userProfile from the database.
+// Retrieve all userPermission from the database.
 exports.findAll = (req, res) => {  
-    UserProfile.findAll({attributes: ['id', 'userId','bio','birthday','createdAt']})
+    UserPermission.findAll({attributes: ['id', 'userId','permissions']})
       .then(data => {
         res.send(data);
       })
       .catch(err => {
         res.status(500).send({
           message:
-            err.message || "Some error occurred while retrieving userProfile."
+            err.message || "Some error occurred while retrieving userPermission."
         });
       });
   };
   
 
-// Find a single UserProfile with an id
+// Find a single UserPermission with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;
   
-    UserProfile.findByPk(id)
+    UserPermission.findByPk(id)
       .then(data => {
         if (data) {
             res.send(data);
         } else {
           res.status(404).send({
-            message: `Cannot find UserProfile with id=${id}.`
+            message: `Cannot find UserPermission with id=${id}.`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Error retrieving UserProfile with id=" + id
+          message: "Error retrieving UserPermission with id=" + id
         });
       });
   };
 
-// Find userProfile by user id
-exports.findUserProfileByUserId = (req, res) => {
-    UserProfile.findOne({ where: { userId: req.params.userId } })
+// Find userPermission by user id
+exports.findUserPermissionByUserId = (req, res) => {
+    UserPermission.findOne({ where: { userId: req.params.userId } })
     .then(data => {
     res.send(data);
     })
     .catch(err => {
     res.status(500).send({
         message:
-        err.message || "Some error occurred while retrieving userProfile."
+        err.message || "Some error occurred while retrieving userPermission."
     });
     });
 };
 
-// Find userProfile by username
-exports.findUserProfileByUsername = async (req, res) => {
+// Find userPermission by username
+exports.findUserPermissionByUsername = async (req, res) => {
     try {
       const user = await User.findOne({ where: { username: req.params.username } });
       if (!user) {
@@ -93,18 +94,18 @@ exports.findUserProfileByUsername = async (req, res) => {
         return;
       }
   
-      const userProfiles = await UserProfile.findOne({ where: { userId: user.id } });
-      res.send(userProfiles);
+      const userPermission = await UserPermission.findOne({ where: { userId: user.id } });
+      res.send(userPermission);
     } catch (error) {
       console.error(error);
       res.status(500).send({
-        message: "Some error occurred while retrieving userProfile."
+        message: "Some error occurred while retrieving userPermission."
       });
     }
 };
   
 
-// Update a userProfile by the id in the request
+// Update a userPermission by the id in the request
 exports.update = (req, res) => {
     const id = req.params.id;
     
@@ -115,28 +116,23 @@ exports.update = (req, res) => {
         return;
     }
 
-    const updatedProfile = {
-        bio: req.body.bio,
-        birthday: req.body.birthday
-    }
-
-    UserProfile.update({bio: updatedProfile.bio, birthday: updatedProfile.birthday}, {
+    UserPermission.update({permissions: req.body.permissions}, {
       where: { id: id }
     })
       .then(num => {
         if (num == 1) {
           res.send({
-            message: "UserProfile was updated successfully."
+            message: "UserPermission was updated successfully."
           });
         } else {
           res.send({
-            message: `Cannot update UserProfile with id=${id}. Maybe UserProfile was not found or req.body is empty!`
+            message: `Cannot update UserPermission with id=${id}. Maybe UserPermission was not found or req.body is empty!`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Error updating UserProfile with id=" + id
+          message: "Error updating UserPermission with id=" + id
         });
       });
   };
@@ -150,84 +146,75 @@ exports.update = (req, res) => {
         return;
     }
 
-    let updatedProfile;
-    if (req.body.bio && req.body.birthday){
-      updatedProfile = {
-        bio: req.body.bio,
-        birthday: req.body.birthday
+    let updatedPermission;
+
+    if (req.body.permissions) {
+        updatedPermission = {
+            permissions: req.body.permissions
       }
-    } else if (req.body.bio && !req.body.birthday){
-        updatedProfile = {
-          bio: req.body.bio,
-      }
-    } else if (!req.body.bio && req.body.birthday){
-        updatedProfile = {
-          birthday: req.body.birthday
-        }
     } else {
-      const updatedProfile = {}
+        updatedProfile = {}
     }
 
-    UserProfile.update(updatedProfile, {
+    UserPermission.update(updatedPermission, {
       where: { userId: userId }
     })
       .then(num => {
         if (num == 1) {
           res.send({
-            message: "UserProfile was updated successfully."
+            message: "UserPermission was updated successfully."
           });
         } else {
           res.send({
-            message: `Cannot update UserProfile with userId=${userId}. Maybe UserProfile was not found or req.body is empty!`
+            message: `Cannot update UserPermission with userId=${userId}. Maybe UserPermission was not found or req.body is empty!`
           });
         }
       })
       .catch(err => {
-        console.log(err)
         res.status(500).send({
-          message: "Error updating UserProfile with userId=" + userId
+          message: "Error updating UserPermission with userId=" + userId
         });
       });
   };
 
-// Delete a UserProfile with the specified id in the request
+// Delete a UserPermission with the specified id in the request
 exports.delete = (req, res) => {
     const id = req.params.id;
   
-    UserProfile.destroy({
+    UserPermission.destroy({
       where: { id: id }
     })
       .then(num => {
         if (num == 1) {
           res.send({
-            message: "Profile was deleted successfully!"
+            message: "Permission was deleted successfully!"
           });
         } else {
           res.send({
-            message: `Cannot delete profile with id=${id}. Maybe profile was not found!`
+            message: `Cannot delete Permission with id=${id}. Maybe Article was not found!`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Could not delete profile with id=" + id
+          message: "Could not delete Permission with id=" + id
         });
       });
   };
 
-// Delete all Profiles from the database.
+// Delete all userPermissions from the database.
 exports.deleteAll = (req, res) => {
-    UserProfile.destroy({
+    UserPermission.destroy({
       where: {},
       truncate: false
     })
       .then(nums => {
-        res.send({ message: `${nums} Profiles were deleted successfully!` });
+        res.send({ message: `${nums} permissions were deleted successfully!` });
       })
       .catch(err => {
         res.status(500).send({
           message:
-            err.message || "Some error occurred while removing all profiles."
+            err.message || "Some error occurred while removing all permissions."
         });
       });
   };

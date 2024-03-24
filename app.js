@@ -18,7 +18,7 @@ app.use((req, res, next) => {
     if (token) {
       req.header('Authorization', `Bearer ${token}`); 
       req.token = token;
-    }    
+    }   
     next();
   } catch (error) {
     console.error(error);

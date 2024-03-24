@@ -4,6 +4,7 @@ module.exports = app => {
     const db = require('../models');
     const User = db.users
     const UserProfile = db.userProfiles
+    const UserPermission = db.userPermissions
     const bcrypt = require('bcrypt');
     const jwt = require('jsonwebtoken');
     const users = require("../controllers/user.controller.js");
@@ -33,7 +34,12 @@ module.exports = app => {
           // Create the userProfile alongside the User
           const userProfile = await UserProfile.create({
             userId: savedUser.id 
-          });      
+          });
+          
+          const userPermission = await UserPermission.create({
+            userId: savedUser.id,
+            permissions: {}
+          })
 
           res.send(savedUser); 
 
@@ -57,7 +63,11 @@ module.exports = app => {
             if (!passwordMatch) {
                 return res.status(401).json({ error: 'Authentication failed' });
             }
-            const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+            const userPermission = await UserPermission.findOne({ where: {userId: user.id} })
+            if (!userPermission) {
+              UserPermission.create({userId: user.id, permissions: {}})
+            }
+            const token = jwt.sign({ userId: user.id, permissions: userPermission.permissions }, process.env.JWT_SECRET, {
                 expiresIn: '24h',
         });
         res.cookie('jwtToken', token, { httpOnly: true }); 
