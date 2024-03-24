@@ -205,22 +205,22 @@ exports.delete = (req, res) => {
       .then(num => {
         if (num == 1) {
           res.send({
-            message: "Article was deleted successfully!"
+            message: "Profile was deleted successfully!"
           });
         } else {
           res.send({
-            message: `Cannot delete Article with id=${id}. Maybe Article was not found!`
+            message: `Cannot delete profile with id=${id}. Maybe profile was not found!`
           });
         }
       })
       .catch(err => {
         res.status(500).send({
-          message: "Could not delete Article with id=" + id
+          message: "Could not delete profile with id=" + id
         });
       });
   };
 
-// Delete all Article from the database.
+// Delete all Profiles from the database.
 exports.deleteAll = (req, res) => {
     UserProfile.destroy({
       where: {},

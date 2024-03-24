@@ -1,6 +1,6 @@
 require('dotenv').config();
 module.exports = {
-    "local": {
+    "production": {
       "username": process.env.DEV_DATABASE_USER,
       "password": process.env.DEV_DATABASE_PASS,
       "database": process.env.DEV_DATABASE_NAME,

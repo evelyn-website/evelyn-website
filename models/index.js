@@ -4,17 +4,20 @@ const Sequelize = require('sequelize');
 const User = require('../models/user.model');
 const Article = require('../models/article.model');
 const UserProfile = require('../models/userProfile.model')
+const UserPermission = require('../models/userPermission.model')
 const hash = require('hash-util');
 const ArticleView = require('./articleView.model');
 const db = {
     users: User,
     articles: Article,
     userProfiles: UserProfile,
-    articleViews: ArticleView
+    articleViews: ArticleView,
+    userPermissions: UserPermission, 
 }   
 
 User.hasMany(Article, {onDelete: 'CASCADE'});
 User.hasOne(UserProfile, {onDelete: 'CASCADE'});
+User.hasOne(UserPermission, {onDelete: 'CASCADE'})
 User.hasMany(ArticleView);
 Article.hasMany(ArticleView, {onDelete: 'CASCADE'});
 
@@ -34,6 +37,9 @@ sequelize
         return Promise.all([])
     })
     .then(articleView => {
+        return Promise.all([])
+    })
+    .then(userPermission => {
         return Promise.all([])
     })
     .catch(err => {
