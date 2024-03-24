@@ -165,14 +165,12 @@ exports.update = (req, res) => {
             message: "UserPermission was updated successfully."
           });
         } else {
-          console.log('failed')
           res.send({
             message: `Cannot update UserPermission with userId=${userId}. Maybe UserPermission was not found or req.body is empty!`
           });
         }
       })
       .catch(err => {
-        console.log(err)
         res.status(500).send({
           message: "Error updating UserPermission with userId=" + userId
         });

@@ -151,7 +151,6 @@ exports.update = (req, res) => {
     }
 
     let updatedProfile;
-    console.log(req.body)
     if (req.body.bio && req.body.birthday){
       updatedProfile = {
         bio: req.body.bio,
@@ -168,20 +167,16 @@ exports.update = (req, res) => {
     } else {
       const updatedProfile = {}
     }
-    console.log(req.body.bio && !req.body.birthday)
-    console.log(updatedProfile)
 
     UserProfile.update(updatedProfile, {
       where: { userId: userId }
     })
       .then(num => {
-        console.log(num)
         if (num == 1) {
           res.send({
             message: "UserProfile was updated successfully."
           });
         } else {
-          console.log('failed')
           res.send({
             message: `Cannot update UserProfile with userId=${userId}. Maybe UserProfile was not found or req.body is empty!`
           });

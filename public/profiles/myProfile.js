@@ -60,7 +60,7 @@ async function getUser(userId) {
 
 async function updateProfile() {
     await fetchUser();
-    const response = await fetch(`/api/userProfiles/byUsername/${loggedInUser.username}`)
+    const response = await fetch(`/api/userProfiles/byUserId/${loggedInUser.id}`)
     const userProfile = await response.json();
     profile.style.display = 'inline-block'
     profileUsername.innerText = loggedInUser.username
