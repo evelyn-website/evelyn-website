@@ -8,15 +8,21 @@ const User = sequelize.define("users", {
       autoIncrement: true
    },
    username: {
-      type: Sequelize.TEXT,
+      type: Sequelize.CITEXT,
       allowNull: false,
-      unique: true,
       validate: {
          not: /\s/g 
-       }   
+      },
+      indexes: [
+         {
+            unique: true,
+            name: 'unique_username',
+            fields: [sequelize.fn('lower', sequelize.col('username'))]
+          }      
+      ]
    },
    email: {
-      type: Sequelize.STRING,
+      type: Sequelize.CITEXT,
       allowNull: false,
       unique: true
    },
