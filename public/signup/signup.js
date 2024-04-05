@@ -11,6 +11,22 @@ document.getElementById("userCreateForm").addEventListener("submit", (event) => 
         password: password
     };
 
+    const spaceRegEx = /\s/g
+
+    if (username.match(spaceRegEx)) {
+        window.alert("Username must not have whitespace!")
+        return;
+    }
+    if (email.match(spaceRegEx)) {
+        window.alert("Email must not have whitespace!")
+        return;
+    }
+    if (password.match(spaceRegEx)) {
+        window.alert("Password must not have whitespace!")
+        return;
+    }
+
+
     postData("/auth/register", data)
         .then((response) => {
         })
