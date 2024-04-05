@@ -8,9 +8,12 @@ const User = sequelize.define("users", {
       autoIncrement: true
    },
    username: {
-      type: Sequelize.STRING,
+      type: Sequelize.TEXT,
       allowNull: false,
-      unique: true
+      unique: true,
+      validate: {
+         not: /\s/g 
+       }   
    },
    email: {
       type: Sequelize.STRING,
