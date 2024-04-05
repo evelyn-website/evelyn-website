@@ -16,6 +16,7 @@ const db = {
 }   
 
 User.hasMany(Article, {onDelete: 'CASCADE'});
+Article.belongsTo(User)
 User.hasOne(UserProfile, {onDelete: 'CASCADE'});
 User.hasOne(UserPermission, {onDelete: 'CASCADE'})
 User.hasMany(ArticleView);

@@ -31,6 +31,10 @@ app.get('/', function (req, res) {
   res.sendFile('homepage.html',  {root: './pages/homepage'});
 });
 
+app.get('/feed', function (req,res) {
+  res.sendFile('feed.html', {root: './pages/feed'});
+})
+
 app.get('/signin', function (req, res) {
   res.sendFile('signin.html',  {root: './pages/signin'});
 });

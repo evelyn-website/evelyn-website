@@ -49,6 +49,29 @@ exports.findAll = (req, res) => {
   };
   
 
+// Find 50 most recent articles
+exports.findRecent = (req, res) => {
+  console.log('findRecent works!')
+  Article.findAll({
+    include: [{
+      model: User,
+      attributes: ['username']
+    }],
+    order: [['createdAt', 'DESC']],
+    limit: 50,
+    attributes: ['id', 'title','body'] 
+  })
+  .then(data => {
+    res.send(data);
+  })
+  .catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving articles."
+    });
+  });
+}
+
 // Find a single Article with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;

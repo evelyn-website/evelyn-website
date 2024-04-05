@@ -1,5 +1,3 @@
-const { verify } = require("jsonwebtoken");
-
 module.exports = app => {
     const articles = require("../controllers/article.controller.js");
     const {verifyToken, verifyAdmin} = require('../middleware/authmiddleware.js');
@@ -10,6 +8,9 @@ module.exports = app => {
   
     // Retrieve all articles
     router.get("/", verifyToken, articles.findAll);
+
+    // Retrieve the 50 most recent articles
+    router.get("/recent", verifyToken, articles.findRecent)
   
     // Retrieve a single article with id
     router.get("/:id", verifyToken, articles.findOne);
