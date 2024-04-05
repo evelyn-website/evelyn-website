@@ -81,7 +81,8 @@
             background-color: #fce917;
             border-radius: 5px;
             height: auto;
-            width: 25%;
+            width: fit-content;
+            min-width: 25%;
             padding: 15px;
             margin: 10px;
             font-family: Arial, Helvetica, sans-serif;
@@ -92,7 +93,8 @@
             background-color: #ebd913;
             border-radius: 5px;
             height: auto;
-            width: 25%;
+            width: fit-content;
+            min-width: 25%;
             padding: 15px;
             font-family: Arial, Helvetica, sans-serif;
             box-shadow: 10px 5px 5px black;
@@ -159,7 +161,10 @@
             display: none
         }
         .article-body{
-
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .article-id{
+            display: none;
         }
     </style>
 </head>
@@ -168,9 +173,6 @@
     <div class="link-box" onclick="location.href='/myprofile'">My Profile</div>
 </div>
 <body class="page">
-    <!-- <div class='homepagelink'><a id= "homepagelink" style="text-align: right; width:10%;  display: inline-block;" href="/">Homepage </a></div>
-    <div class="belowhomepage1"><a id="backToAuthors" href="">Back to Authors</a></div>
-    <div class="belowhomepage2"><a id="backToArticles" href="">Back to Articles</a></div> -->
     <div class="articles">
     </div>
 </body>
