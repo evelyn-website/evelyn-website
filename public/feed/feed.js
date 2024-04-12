@@ -126,7 +126,6 @@ async function getTopArticles(offset) {
     console.log(offset)
     const response = await fetch(`/api/articles/topAllTime/${offset}`);
     const results = await response.json();
-    console.log('results', results)
     results.forEach(article=> {
         addArticle(article.id, article.title, article.user.username, article.body)
     })
