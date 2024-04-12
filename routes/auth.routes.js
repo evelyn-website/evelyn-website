@@ -7,6 +7,8 @@ module.exports = app => {
     const UserPermission = db.userPermissions
     const bcrypt = require('bcrypt');
     const jwt = require('jsonwebtoken');
+    const nodemailer = require('nodemailer')
+    require('dotenv').config()
     const users = require("../controllers/user.controller.js");
 
     // User registration
@@ -22,9 +24,9 @@ module.exports = app => {
 
           // Create a User
           const user = {
-              username: req.body.username,
-              email: req.body.email,
-              password: req.body.password
+              username: req.body.username.trim(),
+              email: req.body.email.trim(),
+              password: req.body.password.trim()
           };
       
           let salt = bcrypt.genSaltSync(10);
@@ -54,7 +56,9 @@ module.exports = app => {
     // User login
     router.post('/login', async (req, res) => {
         try {
-            const { username, password } = req.body;
+            let { username, password } = req.body;
+            username = username.trim()
+            password = password.trim()
             const user = await User.findOne({ where: { username: username } })
             if (!user) {
                 return res.status(401).json({ error: 'Authentication failed' });
@@ -86,6 +90,44 @@ module.exports = app => {
           res.status(500).json({ error: 'Logout failed' });
         }
       });
+
+    router.post('/reset-password-email', async (req, res) => {
+      const transporter = nodemailer.createTransport({
+        service: "Gmail",
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        auth: {
+          user: process.env.EMAIL_ADDRESS,
+          pass: process.env.EMAIL_APP_PASSWORD,
+        },
+      })
+      const email = req.body.email
+      const user = await User.findOne({ where: { email: email } })
+      if (!user) {
+        res.status(422) 
+      } else {
+      const mailOptions = {
+        from: process.env.EMAIL_ADDRESS,
+        to: req.body.email,
+        subject: "Hello from Nodemailer",
+        text: "This is a test email sent using Nodemailer.",
+      }; 
+      try {
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            console.error("Error sending email: ", error);
+          } else {
+            console.log("Email sent: ", info.response);
+          }
+        });
+        
+        res.status(200).json({ message: 'Email sent successfully'})
+      } catch (error) {
+        console.error("Error sending reset email:", error);
+        res.status(500).json({ error: 'Sending reset email failed' });
+      }
+    }})
       
     app.use('/auth', router);
 }
