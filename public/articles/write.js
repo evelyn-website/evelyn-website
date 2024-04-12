@@ -57,8 +57,8 @@ async function postData(url = "", data = {}) {
 writeForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    let title = document.getElementById("title").value;
-    let body = document.getElementById("body").value;
+    let title = document.getElementById("title").value.trim();
+    let body = document.getElementById("body").value.trim();
     const data = {
         userId: loggedInUser.id,
         title: title,
