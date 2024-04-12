@@ -20,10 +20,12 @@ Article.belongsTo(User)
 User.hasOne(UserProfile, {onDelete: 'CASCADE'});
 User.hasOne(UserPermission, {onDelete: 'CASCADE'})
 User.hasMany(ArticleView);
+ArticleView.belongsTo(User)
+ArticleView.belongsTo(Article)
 Article.hasMany(ArticleView, {onDelete: 'CASCADE'});
 
 sequelize
-    .sync({})
+    .sync({ alter: true })
     .then(conn => {
     })
     .then(user => {

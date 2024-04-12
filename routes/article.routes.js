@@ -10,7 +10,9 @@ module.exports = app => {
     router.get("/", verifyToken, articles.findAll);
 
     // Retrieve the 50 most recent articles
-    router.get("/recent", verifyToken, articles.findRecent)
+    router.get("/recent/:page", verifyToken, articles.findRecent)
+
+    router.get('/topAllTime/:page', verifyToken, articles.topAllTime)
   
     // Retrieve a single article with id
     router.get("/:id", verifyToken, articles.findOne);

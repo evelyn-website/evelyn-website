@@ -1,9 +1,10 @@
 const db = require('../models');
 const Article = db.articles
-const Op = require('../db')
+const { Op } = require('sequelize')
+const Sequelize = require('../db')
 const { restart } = require('nodemon');
-const User = require('../models/user.model');
-const users = require("./user.controller.js");
+const User = require('../models/user.model'); 
+const ArticleView = require('../models/articleView.model.js')
 
 // Create and Save a new Article
 exports.create = (req, res) => {
@@ -51,7 +52,13 @@ exports.findAll = (req, res) => {
 
 // Find 50 most recent articles
 exports.findRecent = (req, res) => {
-  console.log('findRecent works!')
+  const page = parseInt(req.params.page, 10)
+  let offset = 0;
+  if (page == NaN) {
+    offset = 0;
+  } else {
+    offset = page * 50
+  }
   Article.findAll({
     include: [{
       model: User,
@@ -59,6 +66,7 @@ exports.findRecent = (req, res) => {
     }],
     order: [['createdAt', 'DESC']],
     limit: 50,
+    offset: offset,
     attributes: ['id', 'title','body'] 
   })
   .then(data => {
@@ -71,6 +79,65 @@ exports.findRecent = (req, res) => {
     });
   });
 }
+
+exports.topAllTime = (req, res) => {
+  console.log('beginning')
+  const page = parseInt(req.params.page, 10)
+  let offset = 0;
+  if (page == NaN) {
+    offset = 0;
+  } else {
+    offset = page * 50
+  }
+  console.log('sequelize', Sequelize)
+  console.log(typeof Sequelize)
+  // Sequelize.query("SELECT s.*, users.username FROM (SELECT count(\"articleViews\".id) AS \"viewCount\", articles.id, articles.title, articles.body, articles.\"userId\" FROM articles LEFT JOIN \"articleViews\" ON articles.id = \"articleViews\".\"articleId\" GROUP BY articles.id LIMIT 50 OFFSET 0) AS s JOIN users ON users.id = s.\"userId\" ORDER BY \"viewCount\" DESC;")
+
+  Article.findAll({
+    attributes: [
+      "id",
+      "title",
+      "body",
+      "userId"
+      // [Sequelize.fn('COUNT', Sequelize.col('id')), 'count']
+    ]
+  })
+
+  Article.findAll({
+    attributes: [
+      [Sequelize.col('articles.id'), 'id'],
+      [Sequelize.col('articles.title'), 'title'],
+      [Sequelize.col('articles.body'), 'body'],
+      [Sequelize.col('articles.userId'), 'userId'],
+      [Sequelize.fn('COUNT', Sequelize.col('articleViews.id')), 'viewCount']
+    ],
+    include: [{
+        model: ArticleView,
+        required: false,
+        duplicating: false,
+        attributes: []
+      },
+      {
+        model: User,
+        required: false,
+        attributes: ['username']
+    }],
+    group: ['articles.id', 'user.id'],
+    order: [['viewCount', 'DESC']],
+    limit: 50
+  })
+  .then(data => {
+    res.send(data);
+  })
+  .catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving articles."
+    });
+  });
+}
+
+
 
 // Find a single Article with an id
 exports.findOne = (req, res) => {
