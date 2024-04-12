@@ -15,11 +15,11 @@ module.exports = app => {
     // Retrieve a single userProfile with userId
     router.get("/byUserId/:userId", verifyToken, userProfiles.findUserProfileByUserId);
 
+    // Update a userProfile with userId
+    router.put("/bySignedInUser", verifyToken, userProfiles.updateBySignedInUser);
+
     // Update a userProfile with id
     router.put("/:id", verifyAdmin, userProfiles.update);
-
-    // Update a userProfile with userId
-    router.put("/byUserId/:userId", verifyToken, userProfiles.updateByUserId);
   
     // Delete a userProfile with id
     router.delete("/:id", verifyAdmin, userProfiles.delete);
