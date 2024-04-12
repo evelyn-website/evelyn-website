@@ -4,8 +4,8 @@ var homepagelink = document.getElementById('homepagelink');
 loginform.addEventListener('submit', async function (e) {
   e.preventDefault();
 
-  const username = document.getElementById('username').value.trim();
-  const password = document.getElementById('password').value.trim();
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
   
 try {
     const data = { username, password };
