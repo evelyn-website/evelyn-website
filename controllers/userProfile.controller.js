@@ -10,7 +10,7 @@ exports.create = (req, res) => {
     // Validate request
     if (!req.body.userId) {
         res.status(400).send({
-          message: "Content can not be empty!"
+          message: "Content cannot be empty!"
         });
         return;
       }
@@ -110,7 +110,7 @@ exports.update = (req, res) => {
     
     if (!req.body.bio) {
         res.status(400).send({
-          message: "Content can not be empty!"
+          message: "Content cannot be empty!"
         });
         return;
     }
@@ -141,9 +141,11 @@ exports.update = (req, res) => {
       });
   };
 
-  exports.updateByUserId = (req, res) => {
-    const userId = req.params.userId;
-    if (!req.params.userId) {
+  exports.updateBySignedInUser = (req, res) => {
+
+    const userId = req.token
+
+    if (!userId) {
         res.status(400).send({
           message: "Content can not be empty!"
         });
@@ -151,6 +153,7 @@ exports.update = (req, res) => {
     }
 
     let updatedProfile;
+
     if (req.body.bio && req.body.birthday){
       updatedProfile = {
         bio: req.body.bio,
@@ -183,7 +186,7 @@ exports.update = (req, res) => {
         }
       })
       .catch(err => {
-        console.log(err)
+        console.error(err)
         res.status(500).send({
           message: "Error updating UserProfile with userId=" + userId
         });
