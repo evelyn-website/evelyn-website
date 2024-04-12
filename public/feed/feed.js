@@ -1,4 +1,5 @@
 let loggedInUser;
+let sortOrder;
 
 async function getUser(userId) {
     try {
@@ -141,7 +142,15 @@ const sortButton = document.getElementById('sortbutton')
 sortButton.addEventListener('click', async function(e){
     e.preventDefault()
     clearArticles()
-    getTopArticles(0)
+    if (sortOrder == 'recent') {
+        getTopArticles(0)
+        sortOrder = 'topAllTime'
+        sortButton.innerText = 'Sort by Recent'
+    } else if (sortOrder == 'topAllTime') {
+        getRecentArticles(0)
+        sortOrder = 'recent'
+        sortButton.innerText = 'Sort by Popular'
+    }
 })
 
 window.addEventListener('DOMContentLoaded', async function(e){
@@ -149,6 +158,7 @@ window.addEventListener('DOMContentLoaded', async function(e){
     try {
     fetchUser()
     getRecentArticles(0)
+    sortOrder = 'recent'
     } catch (error) {
       console.error('Error:', error);
     }
