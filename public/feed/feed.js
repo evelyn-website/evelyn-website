@@ -123,7 +123,6 @@ async function getRecentArticles(offset) {
 }
 
 async function getTopArticles(offset) {
-    console.log(offset)
     const response = await fetch(`/api/articles/topAllTime/${offset}`);
     const results = await response.json();
     results.forEach(article=> {
