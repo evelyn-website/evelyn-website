@@ -24,7 +24,13 @@ const User = sequelize.define("users", {
    email: {
       type: Sequelize.CITEXT,
       allowNull: false,
-      unique: true
+      indexes: [
+         {
+            unique: true,
+            name: 'unique_email',
+            fields: [sequelize.fn('lower', sequelize.col('email'))]
+          }      
+      ]
    },
    password: {
       type: Sequelize.STRING,
