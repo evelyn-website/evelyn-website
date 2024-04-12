@@ -1,9 +1,9 @@
 document.getElementById("userCreateForm").addEventListener("submit", (event) => {
     event.preventDefault();
 
-    const username = document.getElementById("username").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value.trim();
+    const username = document.getElementById("username").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
     const data = {
         username: username,

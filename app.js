@@ -43,10 +43,6 @@ app.get('/signup', function (req, res) {
   res.sendFile('signup.html',  {root: './pages/signup'});
 });
 
-app.get('/reset-password', function (req, res) {
-  res.sendFile('password_reset.html', {root: './pages/signin'})
-})
-
 app.get('/articles/write', function (req, res) {
   res.sendFile('write.html',  {root: './pages/articles'});
 });
@@ -62,6 +58,14 @@ app.get('/articles/readall', function (req, res) {
 app.get('/myprofile', function (req, res) {
   res.sendFile('myProfile.html', {root: './pages/profiles'})
 });
+
+app.get('/signin', function (req, res) {
+  res.sendFile('signin.html', {root: './pages/signin'})
+})
+
+app.get('/articles/topArticles', function (req, res) {
+  res.sendFile('topArticles.html', {root: './pages/articles'})
+})
 
 require("./routes/user.routes")(app);
 require("./routes/userProfile.routes")(app);
