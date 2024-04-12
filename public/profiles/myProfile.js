@@ -93,8 +93,9 @@ editProfileForm.addEventListener("submit", async (event) => {
         birthday: birthdayForm
     };
 
-    await putData(`/api/userProfiles/byUserId/${loggedInUser.id}`, data)
+    await putData('/api/userProfiles/bySignedInUser', data)
     .catch((error) => {
+    console.log(error)
     console.error("Error:", error);
     });
     window.location.href = '/myprofile'; 
