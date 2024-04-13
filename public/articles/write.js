@@ -60,12 +60,11 @@ writeForm.addEventListener("submit", async (event) => {
     let title = document.getElementById("title").value.trim();
     let body = document.getElementById("body").value.trim();
     const data = {
-        userId: loggedInUser.id,
         title: title,
         body: body
     };
 
-    postData("/api/articles/", data)
+    postData("/api/articles/forUser", data)
         .then((response) => {
         })
         .catch((error) => {

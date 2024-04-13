@@ -71,7 +71,7 @@ function isViewThrottled(articleId) {
 
 function registerView(articleId, userId) {
     localStorage.setItem(`lastViewedArticle-${articleId}`, Date.now())
-    postData('/api/articleViews',{userId: userId, articleId: articleId})
+    postData('/api/articleViews/forUser',{articleId: articleId})
 }
 
 function expandBox(articleBox) {

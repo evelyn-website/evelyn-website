@@ -10,9 +10,10 @@ module.exports = app => {
     const nodemailer = require('nodemailer')
     require('dotenv').config()
     const users = require("../controllers/user.controller.js");
+    const {normalCreateRateLimit, extremeCreateRateLimit} = require('../middleware/ratelimit.js')
 
     // User registration
-    router.post('/register', async (req, res) => {
+    router.post('/register', [normalCreateRateLimit, extremeCreateRateLimit], async (req, res) => {
         try{
             // Validate request
             if (!req.body.username) {

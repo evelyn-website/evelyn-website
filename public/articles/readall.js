@@ -80,9 +80,9 @@ async function showArticlesList(){
 
 async function showAuthorsList(){
   lists.style.display = 'block'
-  listTitle.innerHTML = 'List of Authors:'
+  listTitle.textContent = 'List of Authors:'
   articleTable.style.display = 'none'
-  articleTable.innerHTML = ''
+  articleTable.textContent = ''
   userTable.style.display = 'block'
   articleDisplay.style.display = 'none'
 }
@@ -104,7 +104,7 @@ function showUsersInTable(users) {
 
 async function showAllTitlesForUser(user){
   const articles = await getArticles(user.id)
-  listTitle.innerHTML = 'List of Articles:'
+  listTitle.textContent = 'List of Articles:'
   userTable.style.display = 'none'
   articleTable.style.display = 'inline-block'
   backToAuthors.style.display = 'block'
@@ -113,13 +113,11 @@ async function showAllTitlesForUser(user){
     for (const article of articles) {
       var row = articleTable.insertRow(counter);
       var titleCell = row.insertCell(0);
-      // var bodyCell = row.insertCell(1);
       titleCell.innerHTML = `<a href="">${article.title}</a>`;
       titleCell.addEventListener('click', (e) => {
         e.preventDefault();
         showArticle(article,user);
       });
-      // bodyCell.innerHTML = `${article.body}`
       counter++;
     }
   } else {
@@ -133,10 +131,10 @@ async function showArticle(article,user){
   lists.style.display = 'none'
   articleDisplay.style.display = 'block'
   backToArticles.style.display = 'block'
-  selectedArticleTitle.innerHTML = article.title
+  selectedArticleTitle.textContent = article.title
   authorName.innerText = user.username
-  articleBody.innerHTML = article.body
-  postData('/api/articleViews',{userId: loggedInUser.id, articleId: article.id})
+  articleBody.textContent = article.body
+  postData('/api/articleViews/forUser',{articleId: article.id})
 }
 
 async function getArticles(userId) {

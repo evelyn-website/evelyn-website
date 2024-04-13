@@ -35,6 +35,35 @@ exports.create = (req, res) => {
       });
   };
 
+// Create and Save a new Article for the logged in User
+exports.createForUser = (req, res) => {
+  // Validate request
+  if (!req.body.title) {
+      res.status(400).send({
+        message: "Content can not be empty!"
+      });
+      return;
+    }
+
+  // Create a Article
+  const article = {
+      title: req.body.title,
+      body: req.body.body,
+      userId: req.token
+  };
+  // Save Article in the database
+  Article.create(article)
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the article."
+      });
+    });
+};
+
 // Retrieve all Articles from the database.
 exports.findAll = (req, res) => {  
     Article.findAll({attributes: ['id', 'title','body']})
@@ -81,7 +110,6 @@ exports.findRecent = (req, res) => {
 }
 
 exports.topAllTime = (req, res) => {
-  console.log('beginning')
   const page = parseInt(req.params.page, 10)
   let offset = 0;
   if (page == NaN) {
@@ -89,9 +117,6 @@ exports.topAllTime = (req, res) => {
   } else {
     offset = page * 50
   }
-  console.log('sequelize', Sequelize)
-  console.log(typeof Sequelize)
-  // Sequelize.query("SELECT s.*, users.username FROM (SELECT count(\"articleViews\".id) AS \"viewCount\", articles.id, articles.title, articles.body, articles.\"userId\" FROM articles LEFT JOIN \"articleViews\" ON articles.id = \"articleViews\".\"articleId\" GROUP BY articles.id LIMIT 50 OFFSET 0) AS s JOIN users ON users.id = s.\"userId\" ORDER BY \"viewCount\" DESC;")
 
   Article.findAll({
     attributes: [
