@@ -91,6 +91,8 @@ module.exports = app => {
         }
       });
 
+
+    // password reset
     router.post('/reset-password-email', async (req, res) => {
       const transporter = nodemailer.createTransport({
         service: "Gmail",

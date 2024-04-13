@@ -1,7 +1,6 @@
 port = 3000
 const express = require('express');
 const path = require('path'); // For path handling
-const jwt = require('jsonwebtoken');
 
 
 const app = express();
@@ -72,7 +71,3 @@ require("./routes/auth.routes")(app);
 app.listen(port, function () {
   console.log(`App now listening on port ${port}!`);
 });
-
-
-const db = require('./models');
-const User = require("./models/user.model");
