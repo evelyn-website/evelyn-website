@@ -65,7 +65,7 @@ writeForm.addEventListener("submit", async (event) => {
         body: body
     };
 
-    postData("/api/articles/", data)
+    postData("/api/articles/forUser", data)
         .then((response) => {
         })
         .catch((error) => {

@@ -35,6 +35,35 @@ exports.create = (req, res) => {
       });
   };
 
+// Create and Save a new Article for the logged in User
+exports.createForUser = (req, res) => {
+  // Validate request
+  if (!req.body.title) {
+      res.status(400).send({
+        message: "Content can not be empty!"
+      });
+      return;
+    }
+
+  // Create a Article
+  const article = {
+      title: req.body.title,
+      body: req.body.body,
+      userId: req.token
+  };
+  // Save Article in the database
+  Article.create(article)
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the article."
+      });
+    });
+};
+
 // Retrieve all Articles from the database.
 exports.findAll = (req, res) => {  
     Article.findAll({attributes: ['id', 'title','body']})
