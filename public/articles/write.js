@@ -60,7 +60,6 @@ writeForm.addEventListener("submit", async (event) => {
     let title = document.getElementById("title").value;
     let body = document.getElementById("body").value;
     const data = {
-        userId: loggedInUser.id,
         title: title,
         body: body
     };

@@ -4,7 +4,10 @@ module.exports = app => {
     var router = require("express").Router();
 
     // Create a new articleView
-    router.post("/", verifyToken, articleViews.create);
+    router.post("/forUser", verifyToken, articleViews.createForUser);
+    
+    // Create a new articleView
+    router.post("/", verifyAdmin, articleViews.create);
     
     // Retrieve all articleViews
     router.get("/", verifyToken, articleViews.findAll);

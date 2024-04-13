@@ -32,6 +32,33 @@ exports.create = (req, res) => {
       });
   };
 
+  exports.createForUser = (req, res) => {
+    // Validate request
+    if (!req.body.articleId) {
+        res.status(400).send({
+          message: "Content can not be empty!"
+        });
+        return;
+      }
+
+    // Create a articleView
+    const articleView = {
+        userId: req.token,
+        articleId: req.body.articleId
+    };
+    // Save articleView in the database
+    ArticleView.create(articleView)
+      .then(data => {
+        res.send(data);
+      })
+      .catch(err => {
+        res.status(500).send({
+          message:
+            err.message || "Some error occurred while creating the articleView."
+        });
+      });
+  };
+
 // Retrieve all ArticleView from the database.
 exports.findAll = (req, res) => {  
     ArticleView.findAll({attributes: ['id', 'userId','articleId','createdAt']})

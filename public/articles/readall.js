@@ -136,7 +136,7 @@ async function showArticle(article,user){
   selectedArticleTitle.innerHTML = article.title
   authorName.innerText = user.username
   articleBody.innerHTML = article.body
-  postData('/api/articleViews',{userId: loggedInUser.id, articleId: article.id})
+  postData('/api/articleViews/forUser',{articleId: article.id})
 }
 
 async function getArticles(userId) {
