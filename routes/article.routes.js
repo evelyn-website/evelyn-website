@@ -1,10 +1,11 @@
 module.exports = app => {
     const articles = require("../controllers/article.controller.js");
     const {verifyToken, verifyAdmin} = require('../middleware/authmiddleware.js');
+    const {normalCreateRateLimit, extremeCreateRateLimit} = require('../middleware/ratelimit.js')
     var router = require("express").Router();
 
     // Create a new Article
-    router.post("/forUser", verifyToken, articles.createForUser);
+    router.post("/forUser", [verifyToken, normalCreateRateLimit, extremeCreateRateLimit], articles.createForUser);
   
     // Create a new Article
     router.post("/", verifyAdmin, articles.create);

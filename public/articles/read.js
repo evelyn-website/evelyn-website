@@ -68,9 +68,9 @@ function updateArticleDisplay() {
   const body = document.getElementById("bd");
   const articleNum = document.getElementById("articleNum");
 
-  articleNum.innerHTML = artNum;
-  title.innerHTML = articles[page].title;
-  body.innerHTML = articles[page].body;
+  articleNum.textContent = artNum;
+  title.textContent = articles[page].title;
+  body.textContent = articles[page].body;
 
   if (page === 0) {
     previous.style.display = 'none'

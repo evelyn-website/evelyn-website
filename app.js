@@ -2,12 +2,14 @@ port = 3000
 const express = require('express');
 const path = require('path'); // For path handling
 const jwt = require('jsonwebtoken');
-
+const rateLimit = require('express-rate-limit')
+const { globalRateLimiter } = require('./middleware/ratelimit')
 
 const app = express();
 app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded form data 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
@@ -26,6 +28,20 @@ app.use((req, res, next) => {
   }
 });
 
+
+// Rate Limiting
+
+// const globalRateLimiter = rateLimit({
+//   windowMs: 60 * 1000,
+//   max: 100,
+//   message: "You have exceeded your 100 requests per minute limit. Please slow down!",
+//   headers: true,
+// });
+
+app.use(globalRateLimiter)
+
+
+// Routes
 
 app.get('/', function (req, res) {
   res.sendFile('homepage.html',  {root: './pages/homepage'});
