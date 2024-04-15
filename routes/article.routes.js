@@ -1,6 +1,6 @@
 module.exports = app => {
     const articles = require("../controllers/article.controller.js");
-    const {verifyToken, verifyAdmin} = require('../middleware/authmiddleware.js');
+    const {verifyToken, verifyAdmin} = require('../middleware/auth-middleware.js');
     const {normalCreateRateLimit, extremeCreateRateLimit} = require('../middleware/ratelimit.js')
     var router = require("express").Router();
 
