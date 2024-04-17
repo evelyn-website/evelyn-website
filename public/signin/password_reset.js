@@ -20,17 +20,33 @@ function sendResetRequest(data) {
     postData('/auth/reset-password-email', data)
 }
 
+async function checkUser(email) {
+    response = await getData(`/auth/userCheck/${email}`)
+    return (response)
+}
+
 submit.addEventListener('click', async (e) => {
     e.preventDefault();
-    const email = document.getElementById("email").value.trim();
+    const emailInput = document.getElementById("email")
+    const email = emailInput.value.trim();
     if (email == '') {
-        window.alert('Email cannot be blank!')
+        document.querySelector(".bad-input-warning").textContent="Email cannot be blank!"
+        document.querySelector(".bad-input-warning").style.display='block'
         return;
     } else {
     data = {email: email}
+    const exists = await checkUser(email)
     try {
-        if (!isResetThrottled()) {
-            sendResetRequest(data)
+        if (exists) {
+            if (!isResetThrottled()) {
+                document.querySelector(".reset-form").style.display='none'
+                document.querySelector(".reset-form-header").textContent = "Check your email!"
+                document.querySelector(".reset-form-desc").textContent = `We sent password reset instructions to ${email}. \n Make sure to check your spam folder if you don't see it right away.`
+                sendResetRequest(data)
+            }
+        } else {
+            document.querySelector(".bad-input-warning").textContent="No user with this email exists"
+            document.querySelector(".bad-input-warning").style.display='block'
         }
     } catch (error) {
         console.error('Error:', error);
@@ -49,3 +65,12 @@ async function postData(url = "", data = {}) {
     return await response.json();
 }
 
+async function getData(url = "") {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    return await response.json();
+  }

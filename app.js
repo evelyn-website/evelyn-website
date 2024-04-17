@@ -12,9 +12,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
+
+// Standard auth middleware
 app.use((req, res, next) => {
   try {
-    const token = req.cookies.jwtToken;
+    const token = req.cookies.jwt;
     if (token) {
       req.header('Authorization', `Bearer ${token}`); 
       req.token = token;
@@ -26,13 +28,14 @@ app.use((req, res, next) => {
   }
 });
 
-
 // Rate Limiting
 
 app.use(globalRateLimiter)
 
 
 // Routes
+
+// Homepages
 
 app.get('/', function (req, res) {
   res.sendFile('homepage.html',  {root: './pages/homepage'});
@@ -41,6 +44,8 @@ app.get('/', function (req, res) {
 app.get('/feed', function (req,res) {
   res.sendFile('feed.html', {root: './pages/feed'});
 })
+
+// Auth Pages
 
 app.get('/signin', function (req, res) {
   res.sendFile('signin.html',  {root: './pages/signin'});
@@ -53,6 +58,13 @@ app.get('/signup', function (req, res) {
 app.get('/reset-password', function (req, res) {
   res.sendFile('password_reset.html', {root: './pages/signin'})
 })
+
+app.get('/changePassword', function (req, res) {
+  res.sendFile('change_password.html', {root: './pages/signin'})
+})
+
+// Old articles
+
 
 app.get('/articles/write', function (req, res) {
   res.sendFile('write.html',  {root: './pages/articles'});

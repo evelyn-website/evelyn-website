@@ -2,27 +2,30 @@ const jwt = require('jsonwebtoken');
 
 // Middleware for verifying JWTs
 function verifyToken(req, res, next) {
-    var token = req.header('Cookie')
-    if (!token) {return res.status(401).json({ error: 'Access denied' })}
-    token = token.split('=')[1];
+    var token = req.cookies.jwt
+    if (!token) {return res.status(401).json({ error: 'Access denied' })};
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.token = decoded.userId;
-        next();
+        if (decoded.login) {
+            req.token = decoded.userId;
+            next()
+        } else {
+            return res.status(401).json({ error: 'Access denied' })
+        }
     } catch (error) {
         console.log(error)
         res.status(401).json({ error: 'Invalid token' });
       }   
   }
 
-  function verifyAdmin(req, res, next) {
-    var token = req.header('Cookie')
+function verifyAdmin(req, res, next) {
+    var token = req.cookies.jwt
     if (!token) {return res.status(401).json({ error: 'Access denied' })}
-    token = token.split('=')[1];
+        token = token.split('=')[1];
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.token = decoded.userId;
-        if (decoded.permissions.admin) {
+        if (decoded.permissions.admin && decoded.login) {
+            req.token = decoded.userId;
             next()
         } else {
             return res.status(401).json({ error: 'Access denied' })
@@ -31,7 +34,22 @@ function verifyToken(req, res, next) {
     } catch (error) {
         console.log(error)
         res.status(401).json({ error: 'Invalid token' });
-      }   
-  }
+    }   
+}
 
-  module.exports = {verifyToken, verifyAdmin};
+function verifyResetToken(req, res, next) {
+    var resetToken = req.cookies.resetToken
+    if (!resetToken) {return res.status(401).json({ error: 'Access denied' })}
+    try {
+        const decoded = jwt.verify(resetToken, process.env.JWT_SECRET);
+        req.token = decoded.userId
+        next();
+    } catch (error) {
+        console.log(error)
+        res.status(401).json({ error: 'Invalid token' });
+      }   
+}
+
+  
+
+  module.exports = {verifyToken, verifyAdmin, verifyResetToken};

@@ -1,6 +1,5 @@
 const rateLimit = require('express-rate-limit')
 
-
 const globalRateLimiter = rateLimit({
     windowMs: 60 * 1000,
     max: 100,
@@ -24,4 +23,11 @@ const globalRateLimiter = rateLimit({
     headers: true,
   });
 
-module.exports = { globalRateLimiter, normalCreateRateLimit, extremeCreateRateLimit }
+  const resetEmailRateLimit = rateLimit({
+    windowMs: 2 * 60 * 1000,
+    max: 1,
+    message: "Please wait before sending another password reset email",
+    headers: true,
+  })
+
+module.exports = { globalRateLimiter, normalCreateRateLimit, extremeCreateRateLimit, resetEmailRateLimit }
