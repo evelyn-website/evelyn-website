@@ -1,6 +1,6 @@
 module.exports = app => {
     const userProfiles = require("../controllers/userProfile.controller.js");
-    const {verifyToken, verifyAdmin} = require('../middleware/authmiddleware.js');
+    const {verifyToken, verifyAdmin} = require('../middleware/auth-middleware.js');
     var router = require("express").Router();
   
     // Create a new userProfile

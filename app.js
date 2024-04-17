@@ -1,8 +1,6 @@
 port = 3000
 const express = require('express');
 const path = require('path'); // For path handling
-const jwt = require('jsonwebtoken');
-const rateLimit = require('express-rate-limit')
 const { globalRateLimiter } = require('./middleware/ratelimit')
 
 const app = express();
@@ -14,9 +12,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
+
+// Standard auth middleware
 app.use((req, res, next) => {
   try {
-    const token = req.cookies.jwtToken;
+    const token = req.cookies.jwt;
     if (token) {
       req.header('Authorization', `Bearer ${token}`); 
       req.token = token;
@@ -28,20 +28,14 @@ app.use((req, res, next) => {
   }
 });
 
-
 // Rate Limiting
-
-// const globalRateLimiter = rateLimit({
-//   windowMs: 60 * 1000,
-//   max: 100,
-//   message: "You have exceeded your 100 requests per minute limit. Please slow down!",
-//   headers: true,
-// });
 
 app.use(globalRateLimiter)
 
 
 // Routes
+
+// Homepages
 
 app.get('/', function (req, res) {
   res.sendFile('homepage.html',  {root: './pages/homepage'});
@@ -51,6 +45,8 @@ app.get('/feed', function (req,res) {
   res.sendFile('feed.html', {root: './pages/feed'});
 })
 
+// Auth Pages
+
 app.get('/signin', function (req, res) {
   res.sendFile('signin.html',  {root: './pages/signin'});
 });
@@ -58,6 +54,17 @@ app.get('/signin', function (req, res) {
 app.get('/signup', function (req, res) {
   res.sendFile('signup.html',  {root: './pages/signup'});
 });
+
+app.get('/reset-password', function (req, res) {
+  res.sendFile('password_reset.html', {root: './pages/signin'})
+})
+
+app.get('/changePassword', function (req, res) {
+  res.sendFile('change_password.html', {root: './pages/signin'})
+})
+
+// Old articles
+
 
 app.get('/articles/write', function (req, res) {
   res.sendFile('write.html',  {root: './pages/articles'});
@@ -75,14 +82,6 @@ app.get('/myprofile', function (req, res) {
   res.sendFile('myProfile.html', {root: './pages/profiles'})
 });
 
-app.get('/signin', function (req, res) {
-  res.sendFile('signin.html', {root: './pages/signin'})
-})
-
-app.get('/articles/topArticles', function (req, res) {
-  res.sendFile('topArticles.html', {root: './pages/articles'})
-})
-
 require("./routes/user.routes")(app);
 require("./routes/userProfile.routes")(app);
 require("./routes/article.routes")(app);
@@ -92,7 +91,3 @@ require("./routes/auth.routes")(app);
 app.listen(port, function () {
   console.log(`App now listening on port ${port}!`);
 });
-
-
-const db = require('./models');
-const User = require("./models/user.model");

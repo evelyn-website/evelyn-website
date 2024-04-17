@@ -1,7 +1,7 @@
 module.exports = app => {
   const users = require("../controllers/user.controller.js");
   var router = require("express").Router();
-  const {verifyToken, verifyAdmin} = require('../middleware/authmiddleware.js');
+  const {verifyToken, verifyAdmin} = require('../middleware/auth-middleware.js');
 
   // Create a new User
   router.post("/", verifyAdmin, users.create);
@@ -11,6 +11,10 @@ module.exports = app => {
 
    // Retrieve a single User from JWT
    router.get("/fromJWT/", verifyToken, users.getUserFromJWT);
+
+  // Retrieve a single User by email address, used for password reset check.
+  // This actually didn't work because you need to be logged in.
+  // router.get("/byEmail/:email", verifyToken, users.findUserByEmail);
 
   // Retrieve a single User with id
   router.get("/:id", verifyToken, users.findOne);
