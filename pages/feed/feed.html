@@ -5,15 +5,33 @@
     
     <title>Evelyn Website</title>
     <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
         .page{
             /* background-color: #f2daf2; */
             background-color: #f7f797;
             z-index: -1;
         }
+        .content{
+            width: 85%;
+            left: 0px;
+            top: 0px;
+            overflow: hidden;
+            padding: 0;
+        }
+        .opacity-background {
+            z-index: 999;
+            background-color: black;
+            position: fixed;
+            opacity: 60%;
+            height: 100vh;
+            width: 85%;
+        }
         .link-sidebar{
             position: fixed;
             display: flex;
-            /* background-color: #f069f0; */
             background-color: #fce917;
             right:0px;
             top: 0px;
@@ -71,7 +89,6 @@
     <style>
         .articles{
             display: flex;
-            width: 85%;
             justify-content: top;
             align-content: space-between;
             align-items: start;
@@ -186,19 +203,129 @@
         }
         .article-body{
             font-family: Arial, Helvetica, sans-serif;
+            overflow-wrap: break-word;
         }
         .article-id{
             display: none;
         }
     </style>
+    <style>
+        .post-modal {
+            z-index: 1000;
+            background-color: #fce917;
+            border-radius: 30px;
+            border: 5px solid;
+            height: 50vh;
+            width: 50%;
+            position: fixed;
+            top: 10%;
+            left: 15%;
+        }
+        .post-form-header {
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bolder;
+            font-size: xx-large;
+            margin: 3%;
+        }
+        .post-form-desc {
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            font-size: large;
+        }
+        .post-form {
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            font-size: large;
+        }
+        input[type=text] {
+            background: #f7f797;
+            font-size: 14px;
+            border-radius: 10px;
+            margin-left: 3%;
+            width: 40%;
+            height: 30px;
+        }
+        textarea {
+            background: #f7f797;
+            font-size: 14px;
+            border-radius: 10px;
+            border: 2px solid;
+            margin-left: 3%;
+            margin-top: 1%;
+            width: 70%;
+            height: 100px;
+        }
+        .submit-button {
+            background: #f7f797;
+            border: 2px solid;
+            border-radius: 10px;
+            color: #000000;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 2%;
+            margin-left: 3%;
+            width: 70%;
+            height: 30px;
+
+        }
+        .submit-button:hover {
+            background: #d9d948;
+            border: 2px solid;
+            border-radius: 10px;
+            color: #000000;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 2%;
+            margin-left: 3%;
+            width: 70%;
+            height: 30px;
+        }
+        .submit-button:active {
+            background: #d9d948;
+            border: 2px solid;
+            border-radius: 10px;
+            color: #000000;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 2%;
+            margin-left: 3%;
+            width: 70%;
+            height: 30px;
+            box-shadow: 10px 5px 5px black;
+        }
+        .bad-input-warning{
+            font-size: 14px;
+            font-family: Arial, Helvetica, sans-serif;
+            margin-top: 1%;
+        }
+    </style>
 </head>
-<div class="link-sidebar">
-    <div class= "link-box" onclick="location.href='/'"> Home </div>
-    <div class="link-box" onclick="location.href='/myprofile'">My Profile</div>
-    <div id="sortbutton" class="link-box" >Sort by Popular</div>
-</div>
 <body class="page">
-    <div class="articles">
+    <div class="link-sidebar">
+        <div class= "link-box" onclick="location.href='/'"> Home </div>
+        <div class="link-box" onclick="location.href='/myprofile'">My Profile</div>
+        <div id="sort-button" class="link-box" >Sort by Popular</div>
+        <div id="open-post-menu-button" class="link-box">New Article</div>
+    </div>
+    <div class="content">
+        <div class="opacity-background" style="display: none"></div>
+        <div class="post-modal" style="display: none;">
+            <div class="post-form-header">New Article:</div>
+            <form class="post-form">
+                <div style="margin-left: 3%;">Title:</div>
+                <input id="title" type="text">
+                <div style="margin-left: 3%; margin-top: 1%;">Body:</div>
+                <textarea id="body"></textarea>
+                <button class="submit-button" id="submit" type="submit">Submit</button>
+                <div class="bad-input-warning" style="display: none"></div>
+            </form>
+        </div>
+        
+        <div class="articles" id="articles"></div>
+    </div>
     </div>
 </body>
 <script src="/feed/feed.js"></script>
