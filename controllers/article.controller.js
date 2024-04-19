@@ -117,6 +117,7 @@ exports.topAllTime = (req, res) => {
   } else {
     offset = page * 50
   }
+  console.log(offset)
 
   Article.findAll({
     attributes: [
@@ -149,7 +150,8 @@ exports.topAllTime = (req, res) => {
     }],
     group: ['articles.id', 'user.id'],
     order: [['viewCount', 'DESC']],
-    limit: 50
+    limit: 50,
+    offset: offset
   })
   .then(data => {
     res.send(data);
