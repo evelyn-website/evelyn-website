@@ -200,6 +200,13 @@ opacityBackground.addEventListener('click', async function(e) {
   closePostMenu()
 })
 
+window.addEventListener('keydown', function(e) {
+  if (e.key == "Escape") {
+    closePostMenu()
+  }
+});
+
+
 const createArticle = async (data) => {
   postData('/api/articles/forUser', data)
   closePostMenu()
