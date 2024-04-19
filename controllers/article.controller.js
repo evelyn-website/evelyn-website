@@ -117,7 +117,6 @@ exports.topAllTime = (req, res) => {
   } else {
     offset = page * 50
   }
-  console.log(offset)
 
   Article.findAll({
     attributes: [

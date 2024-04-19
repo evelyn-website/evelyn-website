@@ -172,7 +172,6 @@ sortButton.addEventListener('click', async function(e){
 document.addEventListener('scroll', async function (e){
   if(document.documentElement.scrollHeight === window.scrollY + window.innerHeight) {
     let delayres = await delay(300);
-    console.log(pageCounter)
     getNextArticles();
   }
 })
