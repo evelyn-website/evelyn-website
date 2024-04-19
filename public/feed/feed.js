@@ -1,5 +1,6 @@
 let loggedInUser;
 let sortOrder;
+let pageCounter = 0;
 
 async function getUser(userId) {
     try {
@@ -39,7 +40,11 @@ async function getUser(userId) {
     }
   }
 
-const articles = document.querySelector('.articles')
+  const delay = (delayInms) => {
+    return new Promise(resolve => setTimeout(resolve, delayInms));
+  };
+
+const articles = document.getElementById('articles')
 
 expandedBoxes = []
 
@@ -130,12 +135,24 @@ async function getTopArticles(offset) {
     })
 }
 
+async function getNextArticles() {
+  pageCounter += 1;
+  if (sortOrder == 'recent') {
+    getRecentArticles(pageCounter)
+  } else if (sortOrder == 'topAllTime') {
+    getTopArticles(pageCounter)
+  } else {
+    location.reload();
+  }
+}
+
 async function clearArticles() {
     articles.querySelectorAll('.article-box-expanded').forEach(box => box.remove())
     articles.querySelectorAll('.article-box').forEach(box => box.remove());
+    pageCounter = 0;
 }
 
-const sortButton = document.getElementById('sortbutton')
+const sortButton = document.getElementById('sort-button')
 
 sortButton.addEventListener('click', async function(e){
     e.preventDefault()
@@ -150,6 +167,67 @@ sortButton.addEventListener('click', async function(e){
         sortButton.innerText = 'Sort by Popular'
     }
 })
+
+
+document.addEventListener('scroll', async function (e){
+  if(document.documentElement.scrollHeight === window.scrollY + window.innerHeight) {
+    let delayres = await delay(300);
+    console.log(pageCounter)
+    getNextArticles();
+  }
+})
+
+const openPostMenuButton = document.getElementById('open-post-menu-button')
+const postModal = document.querySelector('.post-modal')
+const opacityBackground = document.querySelector('.opacity-background')
+
+function openPostMenu() {
+  postModal.style.display = 'block'
+  opacityBackground.style.display = 'block'
+}
+
+function closePostMenu () {
+  postModal.style.display = 'none'
+  opacityBackground.style.display = 'none'
+}
+
+openPostMenuButton.addEventListener('click', async function(e) {
+  e.preventDefault()
+  openPostMenu()
+})
+
+opacityBackground.addEventListener('click', async function(e) {
+  e.preventDefault()
+  closePostMenu()
+})
+
+const createArticle = async (data) => {
+  postData('/api/articles/forUser', data)
+  closePostMenu()
+  let delayres = await delay(100);
+  location.reload()
+}
+
+const submit = document.getElementById('submit')
+
+submit.addEventListener('click', async (e) => {
+  e.preventDefault();
+  const titleInput = document.getElementById("title")
+  const title = titleInput.value.trim();
+  const bodyInput = document.getElementById("body")
+  const body = bodyInput.value.trim();
+  if (title == '') {
+      document.querySelector(".bad-input-warning").textContent="Title cannot be blank!"
+      document.querySelector(".bad-input-warning").style.display='block'
+      return;
+  } else {
+  data = {title: title, body: body}
+  try {
+    createArticle(data)
+  } catch (error) {
+      console.error('Error:', error);
+  }}
+});
 
 window.addEventListener('DOMContentLoaded', async function(e){
     e.preventDefault()
