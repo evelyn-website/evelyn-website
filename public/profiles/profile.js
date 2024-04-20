@@ -273,8 +273,8 @@ const loadProfile = async(userProfile) => {
         const birthday = userProfile.userProfile.birthday
         const joinDate = userProfile.userProfile.createdAt.toString().slice(0,10)
         profileBoxUsername.textContent = `${userProfile.username}`
-        profileBoxBio.textContent = `${userProfile.userProfile.bio}`
-        profileBoxBirthday.textContent = `Born ${birthday}`
+        if (userProfile.userProfile.bio) {profileBoxBio.textContent = `${userProfile.userProfile.bio}`}
+        if (birthday) {profileBoxBirthday.textContent = `Born ${birthday}`}
         profileBoxJoinDate.textContent = `Joined ${joinDate}`
     }
     if (userProfile.id == loggedInUser.id) {

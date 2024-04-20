@@ -154,21 +154,9 @@ exports.update = (req, res) => {
 
     let updatedProfile;
 
-    if (req.body.bio && req.body.birthday){
-      updatedProfile = {
-        bio: req.body.bio,
-        birthday: req.body.birthday
-      }
-    } else if (req.body.bio && !req.body.birthday){
-        updatedProfile = {
-          bio: req.body.bio,
-      }
-    } else if (!req.body.bio && req.body.birthday){
-        updatedProfile = {
-          birthday: req.body.birthday
-        }
-    } else {
-      const updatedProfile = {}
+    updatedProfile = {
+      bio: req.body.bio,
+      birthday: req.body.birthday
     }
 
     UserProfile.update(updatedProfile, {

@@ -32,7 +32,6 @@ async function getUser(userId) {
         window.location.href = '/'
       } else { 
         loginOptions.style.display = 'block'
-        pages.style.display = 'none'
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
