@@ -141,6 +141,33 @@ exports.findUserByUsername = (req, res) => {
     });
 };
 
+exports.getUserWithProfile = (req, res) => {
+    try {
+      User.findOne({
+          attributes: ['id', 'username', 'email'],
+          where: { username: req.params.username },
+          include: [{
+            model: UserProfile,
+            attributes: ['bio', 'birthday', 'createdAt']
+          }],
+        })
+        .then(user => {
+          if (!user) {
+            res.send({error: 'noUserError'})
+          } else {
+            res.send(user)
+          }
+        })
+        .catch(error => {
+          console.log('error', error)
+          res.status(500).json({ error: 'Error while retrieving user with profile'})
+        })
+    } catch (error) {
+      console.log('error', error)
+      res.status(500).json({ error: 'Error while retrieving user with profile'})
+    }
+}
+
 // Update a User by the id in the request
 exports.update = (req, res) => {
     const id = req.params.id;

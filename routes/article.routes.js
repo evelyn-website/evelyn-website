@@ -11,18 +11,23 @@ module.exports = app => {
     router.post("/", verifyAdmin, articles.create);
   
     // Retrieve all articles
-    router.get("/", verifyToken, articles.findAll);
+    router.get("/", verifyAdmin, articles.findAll);
 
     // Retrieve the 50 most recent articles
     router.get("/recent/:page", verifyToken, articles.findRecent)
 
+    // Retrieve the 50 most recent articles for a specific user
+    router.get("/recentForUser/:userId/:page", verifyToken, articles.findRecentForUser)
+
+    router.get('/topAllTimeForUser/:userId/:page', verifyToken, articles.topAllTimeForUser)
+
     router.get('/topAllTime/:page', verifyToken, articles.topAllTime)
   
     // Retrieve a single article with id
-    router.get("/:id", verifyToken, articles.findOne);
+    router.get("/:id", verifyAdmin, articles.findOne);
 
-    // Retrieve a single Article with userId
-    router.get("/byUserId/:userId", verifyToken, articles.findArticleByUserId);
+    // Retrieve articles with userId
+    router.get("/byUserId/:userId", verifyAdmin, articles.findArticleByUserId);
 
     // Update a article with id
     router.put("/:id", verifyAdmin, articles.update);

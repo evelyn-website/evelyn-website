@@ -7,10 +7,12 @@ module.exports = app => {
   router.post("/", verifyAdmin, users.create);
 
   // Retrieve all Users
-  router.get("/", verifyToken, users.findAll);
+  router.get("/", verifyAdmin, users.findAll);
 
    // Retrieve a single User from JWT
    router.get("/fromJWT/", verifyToken, users.getUserFromJWT);
+
+   router.get("/getUserWithProfile/:username", verifyToken, users.getUserWithProfile)
 
   // Retrieve a single User by email address, used for password reset check.
   // This actually didn't work because you need to be logged in.

@@ -83,11 +83,12 @@ exports.findAll = (req, res) => {
 exports.findRecent = (req, res) => {
   const page = parseInt(req.params.page, 10)
   let offset = 0;
-  if (page == NaN) {
-    offset = 0;
+  if (isNaN(page)) {
+    return res.status(422).send({ message: "Bad input! Page must be a number" });
   } else {
     offset = page * 50
   }
+
   Article.findAll({
     include: [{
       model: User,
@@ -109,24 +110,51 @@ exports.findRecent = (req, res) => {
   });
 }
 
-exports.topAllTime = (req, res) => {
+exports.findRecentForUser = (req, res) => {
   const page = parseInt(req.params.page, 10)
   let offset = 0;
-  if (page == NaN) {
-    offset = 0;
+  if (isNaN(page)) {
+    return res.status(422).send({ message: "Bad input! Page must be a number" });
   } else {
     offset = page * 50
   }
 
+  const userId = parseInt(req.params.userId)
+
+  if (isNaN(userId)) {
+    return res.status(422).send({ message: "Bad input! User ID must be a number" });
+  }
+
   Article.findAll({
-    attributes: [
-      "id",
-      "title",
-      "body",
-      "userId"
-      // [Sequelize.fn('COUNT', Sequelize.col('id')), 'count']
-    ]
+    include: [{
+      model: User,
+      attributes: ['username']
+    }],
+    where: { userId: userId },
+    order: [['createdAt', 'DESC']],
+    limit: 50,
+    offset: offset,
+    attributes: ['id', 'title','body'] 
   })
+  .then(data => {
+    res.send(data);
+  })
+  .catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving articles."
+    });
+  });
+}
+
+exports.topAllTime = (req, res) => {
+  const page = parseInt(req.params.page, 10)
+  let offset = 0;
+  if (isNaN(page)) {
+    return res.status(422).send({ message: "Bad input! Page must be a number" });
+  } else {
+    offset = page * 50
+  }
 
   Article.findAll({
     attributes: [
@@ -149,6 +177,57 @@ exports.topAllTime = (req, res) => {
     }],
     group: ['articles.id', 'user.id'],
     order: [['viewCount', 'DESC']],
+    limit: 50,
+    offset: offset
+  })
+  .then(data => {
+    res.send(data);
+  })
+  .catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving articles."
+    });
+  });
+}
+
+exports.topAllTimeForUser = (req, res) => {
+  const page = parseInt(req.params.page, 10)
+  let offset = 0;
+  if (isNaN(page)) {
+    return res.status(422).send({ message: "Bad input! Page must be a number" });
+  } else {
+    offset = page * 50
+  }
+
+  const userId = parseInt(req.params.userId)
+
+  if (isNaN(userId)) {
+    return res.status(422).send({ message: "Bad input! User ID must be a number" });
+  }
+
+  Article.findAll({
+    attributes: [
+      [Sequelize.col('articles.id'), 'id'],
+      [Sequelize.col('articles.title'), 'title'],
+      [Sequelize.col('articles.body'), 'body'],
+      [Sequelize.col('articles.userId'), 'userId'],
+      [Sequelize.fn('COUNT', Sequelize.col('articleViews.id')), 'viewCount']
+    ],
+    include: [{
+        model: ArticleView,
+        required: false,
+        duplicating: false,
+        attributes: []
+      },
+      {
+        model: User,
+        required: false,
+        attributes: ['username']
+    }],
+    group: ['articles.id', 'user.id'],
+    order: [['viewCount', 'DESC']],
+    where: { userId: userId },
     limit: 50,
     offset: offset
   })

@@ -21,7 +21,6 @@ function verifyToken(req, res, next) {
 function verifyAdmin(req, res, next) {
     var token = req.cookies.jwt
     if (!token) {return res.status(401).json({ error: 'Access denied' })}
-        token = token.split('=')[1];
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         if (decoded.permissions.admin && decoded.login) {
