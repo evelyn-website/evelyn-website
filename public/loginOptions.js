@@ -1,6 +1,4 @@
 var loginOptions = document.getElementById("loginOptions")
-var pages = document.getElementById("pages")
-var logout = document.getElementById('logout')
 
 async function fetchUser() {
     try {
@@ -25,24 +23,13 @@ async function getUser(userId) {
       throw error;
     }
   }
-
-  logout.addEventListener("click", async (event) => {
-    event.preventDefault();
-    try {
-        postData("/auth/logout")
-        location.reload();
-    } catch (error) {
-        console.error("Error:", error)
-    }
-})
   
   window.addEventListener('DOMContentLoaded', async () => {
     try {
       const user = await fetchUser();
   
       if (user) {
-        loginOptions.style.display = 'none';
-        pages.style.display = 'block';
+        window.location.href = '/'
       } else { 
         loginOptions.style.display = 'block'
         pages.style.display = 'none'

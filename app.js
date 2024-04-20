@@ -1,6 +1,8 @@
 port = 3000
 const express = require('express');
-const path = require('path'); // For path handling
+const path = require('path');
+const fs = require('fs')
+const { promisify } = require('util')
 const { globalRateLimiter } = require('./middleware/ratelimit')
 
 const app = express();
@@ -12,6 +14,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
+const readFile = promisify(fs.readFile);
 
 // Standard auth middleware
 app.use((req, res, next) => {
@@ -37,11 +40,11 @@ app.use(globalRateLimiter)
 
 // Homepages
 
-app.get('/', function (req, res) {
-  res.sendFile('homepage.html',  {root: './pages/homepage'});
+app.get('/login', function (req, res) {
+  res.sendFile('loginOptions.html',  {root: './pages/login'});
 });
 
-app.get('/feed', function (req,res) {
+app.get('/', function (req,res) {
   res.sendFile('feed.html', {root: './pages/feed'});
 })
 
@@ -63,24 +66,38 @@ app.get('/changePassword', function (req, res) {
   res.sendFile('change_password.html', {root: './pages/signin'})
 })
 
-// Old articles
+// Old articles, will slowly comment out
 
 
-app.get('/articles/write', function (req, res) {
-  res.sendFile('write.html',  {root: './pages/articles'});
+// app.get('/articles/write', function (req, res) {
+//   res.sendFile('write.html',  {root: './pages/articles'});
+// });
+
+// app.get('/articles/read', function (req, res) {
+//   res.sendFile('read.html',  {root: './pages/articles'});
+// });
+
+// app.get('/articles/readall', function (req, res) {
+//   res.sendFile('readall.html',  {root: './pages/articles'});
+// });
+
+// app.get('/myprofile', function (req, res) {
+//   res.sendFile('myProfile.html', {root: './pages/profiles'})
+// });
+
+
+
+// Profiles
+
+app.get('/profiles/:username', function(req, res) {
+  res.sendFile('profile-template.html', {root: './pages/profiles'})
+})
+
+app.get('/profiles/:username/get-username', async (req, res) => {
+  const username = req.params.username;
+  res.json({ username });
 });
 
-app.get('/articles/read', function (req, res) {
-  res.sendFile('read.html',  {root: './pages/articles'});
-});
-
-app.get('/articles/readall', function (req, res) {
-  res.sendFile('readall.html',  {root: './pages/articles'});
-});
-
-app.get('/myprofile', function (req, res) {
-  res.sendFile('myProfile.html', {root: './pages/profiles'})
-});
 
 require("./routes/user.routes")(app);
 require("./routes/userProfile.routes")(app);

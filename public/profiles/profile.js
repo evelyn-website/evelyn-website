@@ -1,6 +1,10 @@
 let loggedInUser;
 let sortOrder;
+let userProfile;
 let pageCounter = 0;
+let editing = false;
+
+profileBoxEditButton = document.querySelector('.profile-box-edit-button')
 
 async function getUser(userId) {
     try {
@@ -16,7 +20,7 @@ async function getUser(userId) {
     }
   }
 
-  async function postData(url = "", data = {}) {
+async function postData(url = "", data = {}) {
     const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -24,25 +28,68 @@ async function getUser(userId) {
         },
         body: JSON.stringify(data)
     });
-  
+    return await response.json();
+}
+
+async function getData(url = "") {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
     return await response.json();
   }
+  
+async function putData(url = "", data = {}) {
+    const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+    return await response.json();
+}
+  
 
-  async function fetchUser() {
-    try {
-      loggedInUser = await getUser('fromJWT');
-      if (!loggedInUser) {
+async function getUsernameFromParams () {
+    usernameObject = await getData(`/profiles/${encodeURIComponent(window.location.pathname.split('/')[2])}/get-username`)
+    return usernameObject.username
+}
+
+async function getProfileUser (username) {
+    const user = await getData(`/api/users/getUserWithProfile/${username}`)
+    if (Object.keys(user).length == 0 && user.constructor === Object) {
+        return ({ error: 'noUserError'})
+    } else {
+        return (user)
+    }
+}
+
+async function fetchUser() {
+try {
+    loggedInUser = await getUser('fromJWT');
+    if (!loggedInUser) {
         window.location.href = '/login';
         return;
-      }
+    }
     } catch (error) {
       console.error(error);
     }
-  }
+}
 
-  const delay = (delayInms) => {
+const delay = (delayInms) => {
     return new Promise(resolve => setTimeout(resolve, delayInms));
-  };
+};
+
+const myProfileLink = document.getElementById('my-profile-link')
+
+myProfileLink.addEventListener('click', (e) => {
+  e.preventDefault();
+  window.location.href = `/profiles/${loggedInUser.username}`
+})
+
 
 const articles = document.getElementById('articles')
 
@@ -59,20 +106,6 @@ function expandHandler(articleBox) {
         }
       });
 } 
-
-function profileLinkHandler(author) {
-  author.addEventListener('click', (e) => {
-    e.preventDefault();
-    window.location.href = `/profiles/${author.textContent}`
-  })
-}
-
-const myProfileLink = document.getElementById('my-profile-link')
-
-myProfileLink.addEventListener('click', (e) => {
-  e.preventDefault();
-  window.location.href = `/profiles/${loggedInUser.username}`
-})
 
 function isViewThrottled(articleId) {
     const localStorageKey = `lastViewedArticle-${articleId}`;
@@ -130,20 +163,19 @@ function addArticle(id, title, author, body) {
     newAuthor.textContent = author
     newBody.textContent = body
     newId.textContent = id
-    profileLinkHandler(newAuthor)
     expandHandler(newBox)
 }
 
-async function getRecentArticles(offset) {
-    const response = await fetch(`/api/articles/recent/${offset}`);
-    const fetchedArticles = await response.json();
+async function getRecentArticlesForUser(offset, userId) {
+    const response = await getData(`/api/articles/recentForUser/${userId}/${offset}`);
+    const fetchedArticles = await response;
     fetchedArticles.forEach(article=> {
         addArticle(article.id, article.title, article.user.username, article.body)
     })
 }
 
-async function getTopArticles(offset) {
-    const response = await fetch(`/api/articles/topAllTime/${offset}`);
+async function getTopArticlesForUser(offset, userId) {
+    const response = await fetch(`/api/articles/topAllTimeForUser/${userId}/${offset}`);
     const results = await response.json();
     results.forEach(article=> {
         addArticle(article.id, article.title, article.user.username, article.body)
@@ -153,9 +185,9 @@ async function getTopArticles(offset) {
 async function getNextArticles() {
   pageCounter += 1;
   if (sortOrder == 'recent') {
-    getRecentArticles(pageCounter)
+    getRecentArticlesForUser(pageCounter, userProfile.id)
   } else if (sortOrder == 'topAllTime') {
-    getTopArticles(pageCounter)
+    getTopArticlesForUser(pageCounter, userProfile.id)
   } else {
     location.reload();
   }
@@ -173,11 +205,11 @@ sortButton.addEventListener('click', async function(e){
     e.preventDefault()
     clearArticles()
     if (sortOrder == 'recent') {
-        getTopArticles(0)
+        getTopArticlesForUser(0, userProfile.id)
         sortOrder = 'topAllTime'
         sortButton.innerText = 'Sort by Recent'
     } else if (sortOrder == 'topAllTime') {
-        getRecentArticles(0)
+        getRecentArticlesForUser(0, userProfile.id)
         sortOrder = 'recent'
         sortButton.innerText = 'Sort by Popular'
     }
@@ -229,9 +261,30 @@ const createArticle = async (data) => {
   location.reload()
 }
 
-const submit = document.getElementById('submit')
+const loadProfile = async(userProfile) => {
+    const profileBoxUsername = document.querySelector('.profile-box-username')
+    const profileBoxBio = document.querySelector('.profile-box-bio')
+    const profileBoxBirthday = document.querySelector('.profile-box-birthday')
+    const profileBoxJoinDate = document.querySelector('.profile-box-join-date')
+    if (userProfile.error == 'noUserError') {
+        profileBoxUsername.textContent = 'No user with username found'
+        return;
+    } else {
+        const birthday = userProfile.userProfile.birthday
+        const joinDate = userProfile.userProfile.createdAt.toString().slice(0,10)
+        profileBoxUsername.textContent = `${userProfile.username}`
+        profileBoxBio.textContent = `${userProfile.userProfile.bio}`
+        profileBoxBirthday.textContent = `Born ${birthday}`
+        profileBoxJoinDate.textContent = `Joined ${joinDate}`
+    }
+    if (userProfile.id == loggedInUser.id) {
+        profileBoxEditButton.style.display = 'block';
+    }
+}
 
-submit.addEventListener('click', async (e) => {
+const submitArticle = document.getElementById('submit-article')
+
+submitArticle.addEventListener('click', async (e) => {
   e.preventDefault();
   const titleInput = document.getElementById("title")
   const title = titleInput.value.trim();
@@ -250,6 +303,56 @@ submit.addEventListener('click', async (e) => {
   }}
 });
 
+const profileSubmitButton = document.getElementById('edit-profile-submit')
+const bioInput = document.getElementById('profile-bio-edit');
+const birthdayInput = document.getElementById('profile-birthday-edit')
+const profileBoxBio = document.querySelector('.profile-box-bio')
+const profileBoxBirthday = document.querySelector('.profile-box-birthday')
+
+profileBoxEditButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (loggedInUser.id != userProfile.id) {return;}
+    if (!editing) {
+        profileBoxBio.style.display = 'none';
+        profileBoxBirthday.style.display = 'none';
+        bioInput.textContent = profileBoxBio.textContent
+        birthdayInput.value = userProfile.userProfile.birthday
+        bioInput.style.display = 'block';
+        birthdayInput.style.display = 'block'
+        profileSubmitButton.style.display = 'block'
+        editing = true;
+    } else {
+        bioInput.style.display = 'none';
+        birthdayInput.style.display = 'none'
+        profileSubmitButton.style.display = 'none'
+        profileBoxBio.style.display = 'block';
+        profileBoxBirthday.style.display = 'block';
+        editing = false;
+    }
+})
+
+profileSubmitButton.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const data = {
+        bio: bioInput.value,
+        birthday: birthdayInput.value
+    };
+    await putData('/api/userProfiles/bySignedInUser', data)
+        const userProfilename = await getUsernameFromParams()
+        userProfile = await getProfileUser(userProfilename);
+        bioInput.style.display = 'none';
+        birthdayInput.style.display = 'none'
+        profileSubmitButton.style.display = 'none'
+        profileBoxBio.style.display = 'block';
+        profileBoxBirthday.style.display = 'block';
+        editing = false;
+        loadProfile(userProfile)
+    .catch((error) => {
+    console.log(error)
+    console.error("Error:", error);
+    });
+})
+
 const logout = document.getElementById('logout-button')
 
 logout.addEventListener("click", async (event) => {
@@ -265,9 +368,16 @@ logout.addEventListener("click", async (event) => {
 window.addEventListener('DOMContentLoaded', async function(e){
     e.preventDefault()
     try {
-    fetchUser()
-    getRecentArticles(0)
-    sortOrder = 'recent'
+    await fetchUser()
+    const userProfilename = await getUsernameFromParams()
+    userProfile = await getProfileUser(userProfilename);
+    if (userProfile.error == 'noUserError') {
+        loadProfile(userProfile)
+    } else {
+        loadProfile(userProfile)
+        getRecentArticlesForUser(0, userProfile.id)
+        sortOrder = 'recent'
+    }
     } catch (error) {
       console.error('Error:', error);
     }

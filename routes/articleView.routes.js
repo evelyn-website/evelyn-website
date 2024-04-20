@@ -11,7 +11,7 @@ module.exports = app => {
     router.post("/", verifyAdmin, articleViews.create);
     
     // Retrieve all articleViews
-    router.get("/", verifyToken, articleViews.findAll);
+    router.get("/", verifyAdmin, articleViews.findAll);
 
     // Retrieve a single articleView with id
     router.get("/:id", verifyAdmin, articleViews.findOne);

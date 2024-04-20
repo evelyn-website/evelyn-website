@@ -13,7 +13,7 @@ module.exports = app => {
     router.get("/:id", verifyAdmin, userProfiles.findOne);
 
     // Retrieve a single userProfile with userId
-    router.get("/byUserId/:userId", verifyToken, userProfiles.findUserProfileByUserId);
+    router.get("/byUserId/:userId", verifyAdmin, userProfiles.findUserProfileByUserId);
 
     // Update a userProfile with userId
     router.put("/bySignedInUser", verifyToken, userProfiles.updateBySignedInUser);

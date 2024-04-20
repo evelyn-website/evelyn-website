@@ -10,7 +10,6 @@
             padding: 0;
         }
         .page{
-            /* background-color: #f2daf2; */
             background-color: #f7f797;
             z-index: -1;
         }
@@ -35,8 +34,7 @@
             background-color: #fce917;
             right:0px;
             top: 0px;
-            min-width: 15%;
-            width: fit-content;
+            width: 15%;
             height: 100vh;
             justify-content: top;
             align-content: space-between;
@@ -50,8 +48,7 @@
             border: 2px solid;
             min-height: 15px;
             height: fit-content;
-            min-width: 75%;
-            width: fit-content;
+            width: 75%;
             padding: 10%;
             margin: 5%;
             font-family: Arial, Helvetica, sans-serif;
@@ -66,8 +63,7 @@
             border: 2px solid;
             min-height: 20px;
             height: fit-content;
-            min-width: 75%;
-            width: fit-content;
+            width: 75%;
             padding: 10%;
             margin: 5%;
             font-family: Arial, Helvetica, sans-serif;
@@ -81,8 +77,7 @@
             border: 2px solid;
             min-height: 20px;
             height: fit-content;
-            min-width: 75%;
-            width: fit-content;
+            width: 75%;
             padding: 10%;
             margin: 5%;
             font-family: Arial, Helvetica, sans-serif;
@@ -99,7 +94,6 @@
             flex-direction: column;
         }
         .article-box{
-            /* background-color: #f069f0; */
             background-color: #fce917;
             border-radius: 5px;
             height: auto;
@@ -185,14 +179,6 @@
             text-align: left;
             display: inline
         }
-        .article-author:hover{
-            font-family: Arial, Helvetica, sans-serif;
-            cursor: pointer;
-            font-weight: bold;
-            width: fit-content;
-            text-align: left;
-            display: inline
-        }
         .article-body-hidden{
             display: none
         }
@@ -203,6 +189,168 @@
         .article-id{
             display: none;
         }
+    </style>
+    <style>
+        .profile-box{
+            background-color: #fce917;
+            border-radius: 30px;
+            border: 5px solid;
+            min-height: 40%;
+            height: auto;
+            width: 85%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            margin: 10px;
+        }
+        .profile-box-username{
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bolder;
+            font-size: xx-large;
+            margin: 3%;
+        }
+        .profile-box-bio {
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            font-size: large;
+            margin-left: 3%;
+        }
+        .profile-box-birthday {
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            font-size: large;
+            margin-left: 3%;
+        }
+        .profile-box-join-date {
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            font-size: large;
+            margin-left: 3%;
+        }
+        .profile-box-edit-button {
+            background: #f7f797;
+            font-family: Arial, Helvetica, sans-serif;
+            border: 2px solid;
+            border-radius: 10px;
+            color: #000000;
+            cursor: pointer;
+            align-self: end;
+            text-align: center;
+            padding: 2px;
+            position: fixed;
+            font-size: 20px;
+            font-weight: 700;
+            margin: 2%;
+            min-width: 10%;
+            width: auto;
+            min-height: 25px;
+            height: auto;
+
+        }
+        .profile-box-edit-button:hover {
+            background: #d9d948;
+            font-family: Arial, Helvetica, sans-serif;
+            border: 2px solid;
+            border-radius: 10px;
+            color: #000000;
+            cursor: pointer;
+            align-self: end;
+            text-align: center;
+            padding: 2px;
+            position: fixed;
+            font-size: 20px;
+            font-weight: 700;
+            margin: 2%;
+            min-width: 10%;
+            width: auto;
+            height: 25px;
+        }
+        .profile-box-edit-button:active {
+            background: #d9d948;
+            font-family: Arial, Helvetica, sans-serif;
+            border: 2px solid;
+            border-radius: 10px;
+            color: #000000;
+            cursor: pointer;
+            align-self: end;
+            text-align: center;
+            padding: 2px;
+            position: fixed;
+            font-size: 20px;
+            font-weight: 700;
+            margin: 2%;
+            min-width: 10%;
+            width: auto;
+            height: 25px;
+            box-shadow: 10px 5px 5px black;
+        }
+        .profile-box-edit-form{
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            font-size: large;
+        }
+        .profile-textarea {
+            background: #f7f797;
+            font-size: 14px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            border-radius: 10px;
+            border: 2px solid;
+            margin-left: 3%;
+            width: 70%;
+            max-width: 90%;
+            height: 100px;
+        }
+        .profile-date-input {
+            background: #f7f797;
+            font-size: 14px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            border-radius: 10px;
+            border: 2px solid;
+            margin-left: 3%;
+            width: 40%;
+            height: 30px;
+        }
+        .profile-submit-button {
+            background: #f7f797;
+            border: 2px solid;
+            border-radius: 10px;
+            color: #000000;
+            cursor: pointer;
+            font-size: 20px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: 700;
+            margin-left: 3%;
+            width: 70%;
+            height: 30px;
+        }
+        .profile-submit-button:hover {
+            background: #d9d948;
+            border: 2px solid;
+            border-radius: 10px;
+            color: #000000;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: 700;
+            margin-left: 3%;
+            width: 70%;
+            height: 30px;
+        }
+        .profile-submit-button:active {
+            background: #d9d948;
+            border: 2px solid;
+            border-radius: 10px;
+            color: #000000;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: 700;
+            margin-left: 3%;
+            width: 70%;
+            height: 30px;
+            box-shadow: 10px 5px 5px black;
+        }
+
     </style>
     <style>
         .post-modal {
@@ -243,7 +391,7 @@
             width: 40%;
             height: 30px;
         }
-        textarea {
+        .post-textarea {
             background: #f7f797;
             font-size: 14px;
             font-family: Arial, Helvetica, sans-serif;
@@ -253,23 +401,24 @@
             margin-left: 3%;
             margin-top: 1%;
             width: 70%;
+            max-width: 90%;
             height: 100px;
         }
-        .submit-button {
+        .post-submit-button {
             background: #f7f797;
             border: 2px solid;
             border-radius: 10px;
             color: #000000;
             cursor: pointer;
             font-size: 20px;
+            font-family: Arial, Helvetica, sans-serif;
             font-weight: 700;
             margin-top: 2%;
             margin-left: 3%;
             width: 70%;
             height: 30px;
-
         }
-        .submit-button:hover {
+        .post-submit-button:hover {
             background: #d9d948;
             border: 2px solid;
             border-radius: 10px;
@@ -282,7 +431,7 @@
             width: 70%;
             height: 30px;
         }
-        .submit-button:active {
+        .post-submit-button:active {
             background: #d9d948;
             border: 2px solid;
             border-radius: 10px;
@@ -320,15 +469,26 @@
                 <div style="margin-left: 3%;">Title:</div>
                 <input id="title" type="text">
                 <div style="margin-left: 3%; margin-top: 1%;">Body:</div>
-                <textarea id="body"></textarea>
-                <button class="submit-button" id="submit" type="submit">Submit</button>
+                <textarea class="post-textarea" id="body"></textarea>
+                <button class="post-submit-button" id="submit-article" type="submit">Submit</button>
                 <div class="bad-input-warning" style="display: none"></div>
             </form>
         </div>
-        
+        <div class="profile-box">
+            <div class="profile-box-edit-button" style="display: none;">Edit Profile</div>
+            <div class="profile-box-username"></div>
+            <div class="profile-box-bio"></div>
+            <textarea id="profile-bio-edit" class="profile-textarea" style="display: none;"></textarea>
+            <br>
+            <div class="profile-box-birthday"></div>
+            <input type="date" class="profile-date-input" id="profile-birthday-edit" style="display: none;">
+            <div class="profile-box-join-date"></div>
+            <button class="profile-submit-button" style="display: none;" id="edit-profile-submit">Submit</button>
+            <div class="bad-input-warning"></div>
+        </div>
         <div class="articles" id="articles"></div>
     </div>
     </div>
 </body>
-<script src="/feed/feed.js"></script>
+<script src="/profiles/profile.js"></script>
 </html>
