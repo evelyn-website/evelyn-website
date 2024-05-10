@@ -255,8 +255,7 @@ const logout = document.getElementById('logout-button')
 logout.addEventListener("click", async (event) => {
     event.preventDefault();
     try {
-        postData("/auth/logout")
-        location.reload();
+        logoutFunc()
     } catch (error) {
         console.error("Error:", error)
     }
@@ -272,3 +271,19 @@ window.addEventListener('DOMContentLoaded', async function(e){
       console.error('Error:', error);
     }
   });
+
+  async function logoutFunc() {
+    const response = await fetch('/auth/logout', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  
+    // Handle server response (e.g., reload on success)
+    if (response.ok) {
+      window.location.href = '/'
+    } else {
+      window.alert("Logout failed")
+    }
+  }

@@ -1,9 +1,8 @@
 port = 3000
 const express = require('express');
 const path = require('path');
-const fs = require('fs')
-const { promisify } = require('util')
 const { globalRateLimiter } = require('./middleware/ratelimit')
+const cors = require('cors')
 
 const app = express();
 app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded form data 
@@ -14,7 +13,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
-const readFile = promisify(fs.readFile);
+const corsOptions = {
+  origin: ['https://evelynwebsite.com', 'http://localhost:3000']
+}
+app.use(cors(corsOptions))
 
 // Standard auth middleware
 app.use((req, res, next) => {

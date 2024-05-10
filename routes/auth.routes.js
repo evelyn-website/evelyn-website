@@ -47,9 +47,8 @@ module.exports = app => {
             userId: savedUser.id,
             permissions: {}
           })
-
-          res.send(savedUser); 
-
+          responseUser = { user: savedUser.username, email: savedUser.email }
+          res.status(200).send(responseUser); 
           }
           catch (err) {
             res.status(500).send({
@@ -79,7 +78,7 @@ module.exports = app => {
             const token = jwt.sign({ userId: user.id, permissions: userPermission.permissions, login: true }, process.env.JWT_SECRET, {
                 expiresIn: '24h',
             })
-          res.cookie('jwt', token, { httpOnly: true }); 
+          res.cookie('jwt', token, { httpOnly: true, sameSite: 'strict'}); 
           res.status(200).json({ token });
         } catch (error) {
             res.status(500).json({ error: 'Login failed' });
