@@ -154,11 +154,25 @@ exports.update = (req, res) => {
 
     let updatedProfile;
 
-    updatedProfile = {
-      bio: req.body.bio,
-      birthday: req.body.birthday
+    if (!req.body.birthday && req.body.bio) {
+      updatedProfile = {
+        bio: req.body.bio,
+      }
+    } else if (req.body.birthday && !req.body.bio) {
+      updatedProfile = {
+        birthday: req.body.birthday
+      }
+    } else if (!req.body.birthday && !req.body.bio) {
+      res.status(400).send({
+        message: "Content can not be empty!"
+      });
+    } else if (req.body.birthday && req.body.bio) {
+      updatedProfile = {
+        bio: req.body.bio,
+        birthday: req.body.birthday
+      }
     }
-
+    
     UserProfile.update(updatedProfile, {
       where: { userId: userId }
     })
