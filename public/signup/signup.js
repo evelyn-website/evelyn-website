@@ -1,6 +1,5 @@
-document.getElementById("userCreateForm").addEventListener("submit", (event) => {
+document.getElementById("userCreateForm").addEventListener("submit", async (event) => {
     event.preventDefault();
-
     const username = document.getElementById("username").value.trim();
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
@@ -25,28 +24,41 @@ document.getElementById("userCreateForm").addEventListener("submit", (event) => 
         window.alert("Password must not have whitespace!")
         return;
     }
-
-
-    postData("/auth/register", data)
-        .then((response) => {
-        })
-        .catch((error) => {
-            console.error("Error:", error);
-        }).then(
-            window.location.href = '/'
-        )
-        ;
+    try {
+        await registerFunc(data)
+    } catch (error) {
+        console.error('Error:', error)
+    }
 });
 
-async function postData(url = "", data = {}) {
-    const response = await fetch(url, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
+  async function registerFunc(data = {}) {
+    const response = await fetch("/auth/register", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
     });
+    if (response.ok) {
+        await loginFunc('/auth/login', data)
+    } else {
+      window.alert("Error creating account")
+    }
+  }
 
-    return await response.json();
-}
-
+  async function loginFunc(url = "", data = {}) {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+    // Handle server response (e.g., redirect on success)
+    if (response.ok) {
+  
+      window.location.href = '/';
+    } else {
+      window.alert("Incorrect username/password")
+    }
+  }
