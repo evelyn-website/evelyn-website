@@ -131,7 +131,7 @@ function addArticle(id, title, author, body) {
     newTitle.textContent = title;
     newBy.textContent = 'by '
     newAuthor.textContent = author
-    newBody.textContent = body
+    newBody.innerText = body
     newId.textContent = id
     expandHandler(newBox)
 }
