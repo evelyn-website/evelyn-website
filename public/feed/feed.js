@@ -65,6 +65,7 @@ function profileLinkHandler(author) {
     e.preventDefault();
     window.location.href = `/profiles/${author.textContent}`
   })
+  author.classList.add('article-author-clickable')
 }
 
 const myProfileLink = document.getElementById('my-profile-link')
@@ -99,6 +100,8 @@ function expandBox(articleBox) {
     articleBox.classList.replace('article-box', 'article-box-expanded')
     expandedBoxes.push(articleBox)
     articleId = articleBox.querySelector('.article-id').textContent
+    articleAuthor = articleBox.querySelector('.article-author')
+    profileLinkHandler(articleAuthor)
     if (!isViewThrottled(articleId)) {
         registerView(articleId, loggedInUser.id)
     }
@@ -130,7 +133,6 @@ function addArticle(id, title, author, body) {
     newAuthor.textContent = author
     newBody.textContent = body
     newId.textContent = id
-    profileLinkHandler(newAuthor)
     expandHandler(newBox)
 }
 
