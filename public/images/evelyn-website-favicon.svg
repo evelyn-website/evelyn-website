@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 16 16"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <g
+     id="layer1"
+     style="display:inline;fill:#93fc17;fill-opacity:1">
+    <rect
+       style="fill:#333333;fill-opacity:1;stroke-width:1.02389"
+       id="rect1"
+       width="16"
+       height="16"
+       x="0"
+       y="0" />
+    <path
+       style="fill:#fce917;fill-opacity:1;stroke-width:0.0677966"
+       d="M 0.03389831,8 V 0.03389831 H 8 15.966102 V 8 15.966102 H 8 0.03389831 Z"
+       id="path4" />
+  </g>
+  <g
+     id="layer3">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.0234px;font-family:Arial;-inkscape-font-specification:'Arial Bold';fill:#000000;fill-opacity:1;stroke-width:1.00585"
+       x="0.73642635"
+       y="6.8582449"
+       id="text5"
+       transform="scale(0.99455342,1.0054764)"><tspan
+         id="tspan5"
+         x="0.73642635"
+         y="6.8582449"
+         style="font-size:4.0234px;stroke-width:1.00585">evelyn</tspan><tspan
+         x="0.73642635"
+         y="11.887495"
+         id="tspan6"
+         style="font-size:4.0234px;stroke-width:1.00585">website</tspan></text>
+  </g>
+</svg>

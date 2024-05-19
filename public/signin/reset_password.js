@@ -21,7 +21,7 @@ function sendResetRequest(data) {
 }
 
 async function checkUser(email) {
-    response = await getData(`/auth/userCheck/${email}`)
+    response = await getData(`/auth/userCheckEmail/${email}`)
     return (response)
 }
 
