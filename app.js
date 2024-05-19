@@ -43,7 +43,7 @@ app.use(globalRateLimiter)
 // Homepages
 
 app.get('/login', function (req, res) {
-  res.sendFile('loginOptions.html',  {root: './pages/login'});
+  res.sendFile('login.html',  {root: './pages/login'});
 });
 
 app.get('/', function (req,res) {
@@ -52,40 +52,15 @@ app.get('/', function (req,res) {
 
 // Auth Pages
 
-app.get('/signin', function (req, res) {
-  res.sendFile('signin.html',  {root: './pages/signin'});
-});
-
-app.get('/signup', function (req, res) {
-  res.sendFile('signup.html',  {root: './pages/signup'});
-});
 
 app.get('/reset-password', function (req, res) {
-  res.sendFile('password_reset.html', {root: './pages/signin'})
+  res.sendFile('reset_password.html', {root: './pages/password-reset'})
 })
 
-app.get('/changePassword', function (req, res) {
-  res.sendFile('change_password.html', {root: './pages/signin'})
+app.get('/change-password', function (req, res) {
+  res.sendFile('change_password.html', {root: './pages/password-reset'})
 })
 
-// Old articles, will slowly comment out
-
-
-// app.get('/articles/write', function (req, res) {
-//   res.sendFile('write.html',  {root: './pages/articles'});
-// });
-
-// app.get('/articles/read', function (req, res) {
-//   res.sendFile('read.html',  {root: './pages/articles'});
-// });
-
-// app.get('/articles/readall', function (req, res) {
-//   res.sendFile('readall.html',  {root: './pages/articles'});
-// });
-
-// app.get('/myprofile', function (req, res) {
-//   res.sendFile('myProfile.html', {root: './pages/profiles'})
-// });
 
 
 

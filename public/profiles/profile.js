@@ -74,6 +74,7 @@ try {
         window.location.href = '/login';
         return;
     }
+    viewLinkBoxes()
     } catch (error) {
       console.error(error);
     }
@@ -363,6 +364,11 @@ logout.addEventListener("click", async (event) => {
         console.error("Error:", error)
     }
 })
+
+const viewLinkBoxes = () => {
+  linkBoxes = document.querySelectorAll('.link-box')
+  linkBoxes.forEach(linkBox=> linkBox.style.display='block')
+}
 
 window.addEventListener('DOMContentLoaded', async function(e){
     e.preventDefault()

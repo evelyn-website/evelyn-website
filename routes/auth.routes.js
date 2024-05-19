@@ -145,10 +145,24 @@ module.exports = app => {
     }})
 
 
-    router.get('/userCheck/:email', async (req, res) => {
+    router.get('/userCheckEmail/:email', async (req, res) => {
       try {
         const email = req.params.email.trim()
         const user = await User.findOne({ where: { email: email } })
+            if (user) {
+              res.send(true)
+            } else {
+              res.send(false)
+            }
+      } catch (error) {
+        res.status(500).json({ error: 'Error checking if user exists' });
+      }
+    })
+
+    router.get('/userCheckUsername/:username', async (req, res) => {
+      try {
+        const username = req.params.username.trim()
+        const user = await User.findOne({ where: { username: username } })
             if (user) {
               res.send(true)
             } else {
@@ -163,7 +177,7 @@ module.exports = app => {
       try {
         const resetToken = req.params.resetToken
         res.cookie('resetToken', resetToken, { httpOnly: true }); 
-        res.redirect("/changePassword") 
+        res.redirect("/change-password") 
       } catch (error) {
         console.log('error', error)
         res.status(500).json({ error: 'Error assigning reset token'})
