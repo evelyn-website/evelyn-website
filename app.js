@@ -5,6 +5,10 @@ const { globalRateLimiter } = require('./middleware/ratelimit')
 const cors = require('cors')
 
 const app = express();
+
+const numberOfProxies = 1
+app.set('trust proxy', numberOfProxies)
+
 app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded form data 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
