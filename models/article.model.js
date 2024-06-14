@@ -17,6 +17,12 @@ const Article = sequelize.define("articles", {
    userId: {
       type: Sequelize.INTEGER,
       allowNull: false
+   },
+   parent_article_id: {
+      type: Sequelize.INTEGER
+   },
+   thread_position: {
+      type: Sequelize.INTEGER
    }
 });
 
