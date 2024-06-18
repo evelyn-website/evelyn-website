@@ -21,6 +21,16 @@ exports.create = async (req, res) => {
         return;
       }
 
+    const charRegex = /[^a-zA-Z0-9_@\-.]/g
+
+    if (req.body.username.match(charRegex)) {
+      res.status(400).send({
+          message: "Username contains invalid characters!"
+        });
+        return;
+    }
+
+
     // Create a User
     const user = {
         username: req.body.username,
@@ -166,7 +176,7 @@ exports.findUserByUsername = (req, res) => {
 exports.getUserWithProfile = (req, res) => {
     try {
       User.findOne({
-          attributes: ['id', 'username', 'email'],
+          attributes: ['id', 'username'],
           where: { username: req.params.username },
           include: [{
             model: UserProfile,

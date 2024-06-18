@@ -117,6 +117,14 @@ signupForm.addEventListener("submit", async (event) => {
         signupWarning.style.display='block'
         return;
     }
+    const charRegex = /[^a-zA-Z0-9_@\-.]/g
+
+    if (username.match(charRegex)) {
+      signupWarning.textContent="Username contains invalid characters"
+      signupWarning.style.display='block'
+      return;
+    }
+    
     const usernameExists = await checkUserUsername(username)
     if (usernameExists) {
         signupWarning.textContent="Username is taken"
