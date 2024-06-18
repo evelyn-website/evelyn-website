@@ -14,12 +14,11 @@ module.exports = app => {
 
    router.get("/getUserWithProfile/:username", verifyToken, users.getUserWithProfile)
 
-  // Retrieve a single User by email address, used for password reset check.
-  // This actually didn't work because you need to be logged in.
-  // router.get("/byEmail/:email", verifyToken, users.findUserByEmail);
+  router.get("/admin/:id", verifyAdmin, users.findOne)
 
   // Retrieve a single User with id
-  router.get("/:id", verifyToken, users.findOne);
+  router.get("/:id", verifyToken, users.findOneSafe);
+
 
   // Update a User with id
   router.put("/:id", verifyAdmin, users.update);
