@@ -9,7 +9,6 @@ const Article = sequelize.define("articles", {
    },
    title: {
       type: Sequelize.STRING,
-      allowNull: false,
    },
    body: {
       type: Sequelize.TEXT,

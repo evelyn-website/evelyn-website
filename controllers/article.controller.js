@@ -246,14 +246,21 @@ exports.topAllTimeForUser = (req, res) => {
 
 exports.addReplyToArticle = async (req, res) => {
   // Validate request
-  if (!req.body.title) {
+  if (!req.body.parent_article_id) {
       res.status(400).send({
-        message: "Content can not be empty!"
+        message: "Reply must have a parent article!"
       });
       return;
   }
 
   const parent_article_id = req.body.parent_article_id
+
+  const parent_article = await Article.findOne({ where: { id: parent_article_id } })
+  if (!parent_article) {
+    res.status(400).send({
+        message: "Parent article must be valid"
+      });
+  }
 
   // count positions
   const latestQuery = await Article.findAll({
@@ -265,7 +272,6 @@ exports.addReplyToArticle = async (req, res) => {
 
   // Create a Article
   const article = {
-      title: req.body.title,
       body: req.body.body,
       userId: req.token,
       thread_position: (latestQuery.length > 0) ? latestQuery[0].thread_position + 1 : 0,
