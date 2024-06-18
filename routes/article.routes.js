@@ -22,7 +22,11 @@ module.exports = app => {
     router.get('/topAllTimeForUser/:userId/:page', verifyToken, articles.topAllTimeForUser)
 
     router.get('/topAllTime/:page', verifyToken, articles.topAllTime)
-  
+
+    router.post('/newReply', [verifyToken, normalCreateRateLimit, extremeCreateRateLimit], articles.addReplyToArticle)
+
+    router.get('/findReplies/:parent_article_id/:page', [verifyToken], articles.findReplies)
+    
     // Retrieve a single article with id
     router.get("/:id", verifyAdmin, articles.findOne);
 

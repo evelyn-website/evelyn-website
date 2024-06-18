@@ -113,6 +113,28 @@ exports.findOne = (req, res) => {
         });
       });
   };
+
+  exports.findOneSafe = (req, res) => {
+    const id = req.params.id;
+  
+    User.findByPk(id,{attributes: ['id', 'username','createdAt','updatedAt']})
+      .then(data => {
+        if (data) {
+            res.send(data);
+        } else {
+          res.status(404).send({
+            message: `Cannot find User with id=${id}.`
+          });
+        }
+      })
+      .catch(err => {
+        res.status(500).send({
+          message: "Error retrieving User with id=" + id
+        });
+      });
+  };
+
+  
 // Find Users by email address
 exports.findUserByEmail = (req, res) => {
     User.findOne({ where: { email: req.params.email } })

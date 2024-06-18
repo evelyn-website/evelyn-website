@@ -94,6 +94,7 @@ exports.findRecent = (req, res) => {
       model: User,
       attributes: ['username']
     }],
+    where: { parent_article_id: null },
     order: [['createdAt', 'DESC']],
     limit: 50,
     offset: offset,
@@ -130,7 +131,7 @@ exports.findRecentForUser = (req, res) => {
       model: User,
       attributes: ['username']
     }],
-    where: { userId: userId },
+    where: { userId: userId, parent_article_id: null },
     order: [['createdAt', 'DESC']],
     limit: 50,
     offset: offset,
@@ -175,6 +176,7 @@ exports.topAllTime = (req, res) => {
         required: false,
         attributes: ['username']
     }],
+    where: { parent_article_id: null },
     group: ['articles.id', 'user.id'],
     order: [['viewCount', 'DESC']],
     limit: 50,
@@ -227,7 +229,7 @@ exports.topAllTimeForUser = (req, res) => {
     }],
     group: ['articles.id', 'user.id'],
     order: [['viewCount', 'DESC']],
-    where: { userId: userId },
+    where: { userId: userId, parent_article_id: null },
     limit: 50,
     offset: offset
   })
@@ -241,6 +243,86 @@ exports.topAllTimeForUser = (req, res) => {
     });
   });
 }
+
+exports.addReplyToArticle = async (req, res) => {
+  // Validate request
+  if (!req.body.parent_article_id) {
+      res.status(400).send({
+        message: "Reply must have a parent article!"
+      });
+      return;
+  }
+
+  const parent_article_id = req.body.parent_article_id
+
+  const parent_article = await Article.findOne({ where: { id: parent_article_id } })
+  if (!parent_article) {
+    res.status(400).send({
+        message: "Parent article must be valid"
+      });
+  }
+
+  // count positions
+  const latestQuery = await Article.findAll({
+    attributes: ['id', 'parent_article_id', 'thread_position'],
+    order: [['thread_position', 'DESC']],
+    where: { parent_article_id: parent_article_id },
+    limit: 1,
+  })
+
+  // Create a Article
+  const article = {
+      body: req.body.body,
+      userId: req.token,
+      thread_position: (latestQuery.length > 0) ? latestQuery[0].thread_position + 1 : 0,
+      parent_article_id: parent_article_id,
+  };
+
+  // Save Article in the database
+  Article.create(article)
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the article."
+      });
+    });
+};
+
+exports.findReplies = (req, res) => {
+  const page = parseInt(req.params.page, 10)
+  let offset = 0;
+  if (isNaN(page)) {
+    return res.status(422).send({ message: "Bad input! Page must be a number" });
+  } else {
+    offset = page * 50
+  }
+
+  Article.findAll({
+    include: [{
+      model: User,
+      attributes: ['username']
+    }],
+    where: { parent_article_id: req.params.parent_article_id },
+    order: [['thread_position', 'ASC']],
+    limit: 50,
+    offset: offset,
+    attributes: ['id', 'title','body', 'thread_position', 'parent_article_id'] 
+  })
+  .then(data => {
+    res.send(data);
+  })
+  .catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving articles."
+    });
+  });
+}
+
+
 
 
 
