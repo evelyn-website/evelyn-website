@@ -4,7 +4,8 @@
   "description": "This website is for me and my friends",
   "main": "index.js",
   "scripts": {
-    "test": "console.log(\"Evelyn Website\")"
+    "test": "console.log(\"Evelyn Website\")",
+    "scss": "sass -w ./scss/style.scss ./public/css/style.css"
   },
   "repository": {
     "type": "git",
