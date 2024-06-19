@@ -255,7 +255,7 @@ exports.addReplyToArticle = async (req, res) => {
 
   const parent_article_id = req.body.parent_article_id
 
-  const parent_article = await Article.findOne({ where: { id: parent_article_id } })
+  const parent_article = await Article.findOne({ where: { id: parent_article_id, parent_article_id: null } })
   if (!parent_article) {
     res.status(400).send({
         message: "Parent article must be valid"
