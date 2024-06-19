@@ -19,7 +19,6 @@ module.exports = app => {
   // Retrieve a single User with id
   router.get("/:id", verifyToken, users.findOneSafe);
 
-
   // Update a User with id
   router.put("/:id", verifyAdmin, users.update);
 

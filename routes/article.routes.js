@@ -28,7 +28,7 @@ module.exports = app => {
     router.get('/findReplies/:parent_article_id/:page', [verifyToken], articles.findReplies)
     
     // Retrieve a single article with id
-    router.get("/:id", verifyAdmin, articles.findOne);
+    router.get("/:id", verifyToken, articles.findOne);
 
     // Retrieve articles with userId
     router.get("/byUserId/:userId", verifyAdmin, articles.findArticleByUserId);
