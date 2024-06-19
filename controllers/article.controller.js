@@ -330,7 +330,10 @@ exports.findReplies = (req, res) => {
 exports.findOne = (req, res) => {
     const id = req.params.id;
   
-    Article.findByPk(id)
+    Article.findByPk(id, {include: [{
+      model: User,
+      attributes: ['username']
+    }]})
       .then(data => {
         if (data) {
             res.send(data);
