@@ -24,6 +24,7 @@ app.use(cors(corsOptions))
 
 // Standard auth middleware
 app.use((req, res, next) => {
+  console.log('forwarded-for', req.headers['x-forwarded-for'])
   try {
     const token = req.cookies.jwt;
     if (token) {
