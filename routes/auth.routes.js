@@ -63,6 +63,11 @@ module.exports = app => {
             let { username, password } = req.body;
             username = username.trim()
             password = password.trim()
+            if (!(username && password)) {
+              res.status(400).send({
+              message: "Content can not be empty!"
+              });
+            }
             const user = await User.findOne({ where: { username: username } })
             if (!user) {
                 return res.status(401).json({ error: 'Incorrect username or password' });
@@ -112,6 +117,11 @@ module.exports = app => {
         },
       })
       const email = req.body.email
+      if (!email) {
+        res.status(400).send({
+          message: "Content can not be empty!"
+        });
+      }
       const user = await User.findOne({ where: { email: email } })
       if (!user) {
         res.status(422) 
@@ -147,6 +157,11 @@ module.exports = app => {
 
     router.get('/userCheckEmail/:email', [globalRateLimiter, normalCreateRateLimit], async (req, res) => {
       try {
+        if (!email) {
+          res.status(400).send({
+            message: "Content can not be empty!"
+          });
+        }
         const email = req.params.email.trim()
         const user = await User.findOne({ where: { email: email } })
             if (user) {
@@ -162,6 +177,11 @@ module.exports = app => {
     router.get('/userCheckUsername/:username', [globalRateLimiter, normalCreateRateLimit], async (req, res) => {
       try {
         const username = req.params.username.trim()
+        if (!username) {
+          res.status(400).send({
+            message: "Content can not be empty!"
+        });
+        }
         const user = await User.findOne({ where: { username: username } })
             if (user) {
               res.send(true)
@@ -188,6 +208,9 @@ module.exports = app => {
     router.put('/changePassword', [verifyResetToken], async (req, res) => {
       try {
         const userId = req.token
+        if (!userId) {
+          res.status(401)
+        }
 
         let salt = bcrypt.genSaltSync(10);
         const password = bcrypt.hashSync(req.body.password, salt);

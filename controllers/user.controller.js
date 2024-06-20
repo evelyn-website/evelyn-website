@@ -144,34 +144,6 @@ exports.findOne = (req, res) => {
       });
   };
 
-  
-// Find Users by email address
-exports.findUserByEmail = (req, res) => {
-    User.findOne({ where: { email: req.params.email } })
-    .then(data => {
-    res.send(data);
-    })
-    .catch(err => {
-    res.status(500).send({
-        message:
-        err.message || "Some error occurred while retrieving users."
-    });
-    });
-};
-
-// Find Users by username
-exports.findUserByUsername = (req, res) => {
-    User.findOne({ where: { username: req.params.username } })
-    .then(data => {
-    res.send(data);
-    })
-    .catch(err => {
-    res.status(500).send({
-        message:
-        err.message || "Some error occurred while retrieving users."
-    });
-    });
-};
 
 exports.getUserWithProfile = (req, res) => {
     try {
