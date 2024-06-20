@@ -297,7 +297,7 @@ exports.findReplies = (req, res) => {
   if (isNaN(page)) {
     return res.status(422).send({ message: "Bad input! Page must be a number" });
   } else {
-    offset = page * 50
+    offset = page * 2
   }
 
   Article.findAll({
@@ -306,8 +306,8 @@ exports.findReplies = (req, res) => {
       attributes: ['username']
     }],
     where: { parent_article_id: req.params.parent_article_id },
-    order: [['thread_position', 'ASC']],
-    limit: 50,
+    limit: 2,
+    order: [['thread_position', 'DESC']],
     offset: offset,
     attributes: ['id', 'title','body', 'thread_position', 'parent_article_id'] 
   })
@@ -322,7 +322,20 @@ exports.findReplies = (req, res) => {
   });
 }
 
-
+exports.countReplies = (req, res) => {
+  Article.count({
+    where: { parent_article_id: req.params.parent_article_id }
+  })
+  .then(count => {
+    res.send({count: count});
+  })
+  .catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred while retrieving articles."
+    });
+  });
+}
 
 
 
