@@ -141,7 +141,7 @@ function addArticle(id, title, author, body) {
     expandHandler(newBox)
 }
 
-function addReply(id, parent_article_id, author, body) {
+function addReply(direction, id_after, id, parent_article_id, author, body) {
     const parent = document.getElementById(`${parent_article_id}`)
     const newBox = articles.appendChild(document.createElement("div"))
     const newBy = newBox.appendChild(document.createElement("div"))
@@ -159,7 +159,8 @@ function addReply(id, parent_article_id, author, body) {
     newBody.innerText = body
     newId.textContent = id
     newBox.classList.add(`parent-article-id-${parent_article_id}`)
-    parent.insertAdjacentElement('afterend', newBox)
+    const idAfter = document.getElementById(`${id_after}`)
+    idAfter.insertAdjacentElement(direction, newBox)
 }
 
 function addShowMoreBox(parent_article_id) {
@@ -200,17 +201,23 @@ async function getReplies(parent_article_id, offset) {
   const results = await response.json();
   const countRequest = await fetch(`/api/articles/countReplies/${parent_article_id}`)
   const countResults = await countRequest.json();
-  const remainingCount = countResults.count - ((offset+1)*2)
+  const remainingCount = countResults.count - ((offset+1)*50)
   const showMoreBox = document.getElementById(`show-more-${parent_article_id}`)
   if (remainingCount > 0 && !showMoreBox) {
     addShowMoreBox(parent_article_id)
   }
+  if (offset > 0) {
+    results.forEach(reply=> {
+      addReply('beforebegin', showMoreBox.id, reply.id, parent_article_id, reply.user.username, reply.body)
+    })
+  } else {
+    results.reverse().forEach(reply=> {
+      addReply('afterend', parent_article_id, reply.id, parent_article_id, reply.user.username, reply.body)
+    })
+  }
   if (remainingCount <= 0 && showMoreBox) {
     showMoreBox.remove()
   }
-  results.reverse().forEach(reply=> {
-    addReply(reply.id, parent_article_id, reply.user.username, reply.body)
-  })
 }
 
 function showMoreHandler(showMoreBox, parent_article_id) {
