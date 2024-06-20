@@ -260,6 +260,7 @@ exports.addReplyToArticle = async (req, res) => {
     res.status(400).send({
         message: "Parent article must be valid"
       });
+      return;
   }
 
   // count positions
