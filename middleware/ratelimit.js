@@ -7,8 +7,6 @@ const globalRateLimiter = rateLimit({
     headers: true,
   });
 
-
-
   const normalCreateRateLimit = rateLimit({
     windowMs: 2 * 60 * 1000,
     max: 15,

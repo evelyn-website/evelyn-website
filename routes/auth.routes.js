@@ -14,7 +14,7 @@ module.exports = app => {
     require('dotenv').config()
     const users = require("../controllers/user.controller.js");
     const { verifyResetToken } = require('../middleware/auth-middleware.js');
-    const {normalCreateRateLimit, extremeCreateRateLimit, resetEmailRateLimit} = require('../middleware/ratelimit.js')
+    const {normalCreateRateLimit, extremeCreateRateLimit, resetEmailRateLimit, globalRateLimiter} = require('../middleware/ratelimit.js')
 
     // User registration
     router.post('/register', [normalCreateRateLimit, extremeCreateRateLimit], async (req, res) => {
@@ -58,7 +58,7 @@ module.exports = app => {
     });
 
     // User login
-    router.post('/login', async (req, res) => {
+    router.post('/login', [globalRateLimiter, normalCreateRateLimit], async (req, res) => {
         try {
             let { username, password } = req.body;
             username = username.trim()
@@ -145,7 +145,7 @@ module.exports = app => {
     }})
 
 
-    router.get('/userCheckEmail/:email', async (req, res) => {
+    router.get('/userCheckEmail/:email', [globalRateLimiter, normalCreateRateLimit], async (req, res) => {
       try {
         const email = req.params.email.trim()
         const user = await User.findOne({ where: { email: email } })
@@ -159,7 +159,7 @@ module.exports = app => {
       }
     })
 
-    router.get('/userCheckUsername/:username', async (req, res) => {
+    router.get('/userCheckUsername/:username', [globalRateLimiter, normalCreateRateLimit], async (req, res) => {
       try {
         const username = req.params.username.trim()
         const user = await User.findOne({ where: { username: username } })
