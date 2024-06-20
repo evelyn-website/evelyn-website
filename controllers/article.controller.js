@@ -342,6 +342,7 @@ exports.findOne = (req, res) => {
           res.status(404).send({
             message: `Cannot find Article with id=${id}.`
           });
+          return;
         }
       })
       .catch(err => {

@@ -67,6 +67,7 @@ module.exports = app => {
               res.status(400).send({
               message: "Content can not be empty!"
               });
+              return;
             }
             const user = await User.findOne({ where: { username: username } })
             if (!user) {
@@ -121,10 +122,12 @@ module.exports = app => {
         res.status(400).send({
           message: "Content can not be empty!"
         });
+        return;
       }
       const user = await User.findOne({ where: { email: email } })
       if (!user) {
         res.status(422) 
+        return;
       } else {
 
       const resetToken = jwt.sign({ userId: user.id, login: false, passwordReset: true }, process.env.JWT_SECRET, {
@@ -161,6 +164,7 @@ module.exports = app => {
           res.status(400).send({
             message: "Content can not be empty!"
           });
+          return;
         }
         const email = req.params.email.trim()
         const user = await User.findOne({ where: { email: email } })
@@ -180,7 +184,8 @@ module.exports = app => {
         if (!username) {
           res.status(400).send({
             message: "Content can not be empty!"
-        });
+          });
+          return;
         }
         const user = await User.findOne({ where: { username: username } })
             if (user) {
@@ -210,6 +215,7 @@ module.exports = app => {
         const userId = req.token
         if (!userId) {
           res.status(401)
+          return;
         }
 
         let salt = bcrypt.genSaltSync(10);

@@ -157,7 +157,8 @@ exports.getUserWithProfile = (req, res) => {
         })
         .then(user => {
           if (!user) {
-            res.send({error: 'noUserError'})
+            res.status(400).send({error: 'noUserError'})
+            return
           } else {
             res.send(user)
           }
