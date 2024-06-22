@@ -12,7 +12,6 @@ module.exports = app => {
     const path = require('path')
     const { promisify } = require('util')
     require('dotenv').config()
-    const users = require("../controllers/user.controller.js");
     const { verifyResetToken } = require('../middleware/auth-middleware.js');
     const {normalCreateRateLimit, extremeCreateRateLimit, resetEmailRateLimit, globalRateLimiter} = require('../middleware/ratelimit.js')
 
