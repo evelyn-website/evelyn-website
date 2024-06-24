@@ -159,13 +159,13 @@ module.exports = app => {
 
     router.get('/userCheckEmail/:email', [globalRateLimiter, normalCreateRateLimit], async (req, res) => {
       try {
+        const email = req.params.email.trim()
         if (!email) {
           res.status(400).send({
             message: "Content can not be empty!"
           });
           return;
         }
-        const email = req.params.email.trim()
         const user = await User.findOne({ where: { email: email } })
             if (user) {
               res.send(true)
