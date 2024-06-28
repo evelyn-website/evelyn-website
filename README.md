@@ -4,4 +4,6 @@ welcome to evelyn website
 
 please be kind
 
-NODE VERSION: v21.7.1
+NODE VERSION: v20.15.0
+
+you need to run "CREATE EXTENSION citext;"
