@@ -307,7 +307,7 @@ exports.findReplies = (req, res) => {
     }],
     where: { parent_article_id: req.params.parent_article_id },
     limit: 50,
-    order: [['thread_position', 'DESC']],
+    order: [['thread_position', 'ASC']],
     offset: offset,
     attributes: ['id', 'title','body', 'thread_position', 'parent_article_id'] 
   })
