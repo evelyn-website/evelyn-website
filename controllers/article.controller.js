@@ -322,22 +322,6 @@ exports.findReplies = (req, res) => {
   });
 }
 
-exports.countReplies = (req, res) => {
-  Article.count({
-    where: { parent_article_id: req.params.parent_article_id }
-  })
-  .then(count => {
-    res.send({count: count});
-  })
-  .catch(err => {
-    res.status(500).send({
-      message:
-        err.message || "Some error occurred while retrieving articles."
-    });
-  });
-}
-
-
 
 // Find a single Article with an id
 exports.findOne = (req, res) => {
