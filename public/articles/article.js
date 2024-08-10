@@ -41,25 +41,15 @@ async function getData(url = "") {
 
 async function getArticleIdFromParams () {
     idObject = await getData(`/articles/${encodeURIComponent(window.location.pathname.split('/')[2])}/get-article-id`)
-    console.log(idObject.id)
     return idObject.id
 }
 
 async function getArticleFromId(id) {
     const article = await getData(`/api/articles/${id}`)
-    if (Object.keys(article).length == 0 && article.constructor === Object) {
+    if (article.message) {
         return ({ error: 'noArticleError'})
     } else {
         return (article)
-    }
-}
-
-async function getProfileUser (username) {
-    const user = await getData(`/api/users/getUserWithProfile/${username}`)
-    if (Object.keys(user).length == 0 && user.constructor === Object) {
-        return ({ error: 'noUserError'})
-    } else {
-        return (user)
     }
 }
 
@@ -108,6 +98,11 @@ function addArticle(id, title, author, body) {
     newAuthor.textContent = author
     newBody.innerText = body
     newId.textContent = id
+    newBox.id = id
+    newAuthor.addEventListener('click', (e) => {
+      e.preventDefault()
+      window.location.href = `/profiles/${author}`
+    })
 }
 
 const getRepliesForArticle = async(parent_article_id, offset) => {
@@ -174,12 +169,16 @@ const loadArticle = async(article) => {
     const pageArticleAuthor = document.querySelector('.page-article-box-author');
     const pageArticleBody = document.querySelector('.page-article-box-body');
     if (pageArticle.error == 'noArticleError') {
-        pageArticleBoxTitle.textContent = 'No article with id found'
+        pageArticleTitle.textContent = 'No article with id found'
         return;
     } else {
         pageArticleTitle.textContent = `${article.title}`
         pageArticleAuthor.textContent = `by ${article.user.username}`
         if (article.body) {pageArticleBody.innerText = `${article.body}`}
+        pageArticleAuthor.addEventListener('click', (e) => {
+          e.preventDefault()
+          window.location.href = `/profiles/${article.user.username}`
+        })
     }
 }
 
