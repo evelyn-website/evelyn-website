@@ -297,7 +297,7 @@ exports.findReplies = (req, res) => {
   if (isNaN(page)) {
     return res.status(422).send({ message: "Bad input! Page must be a number" });
   } else {
-    offset = page * 2
+    offset = page * 50
   }
 
   Article.findAll({

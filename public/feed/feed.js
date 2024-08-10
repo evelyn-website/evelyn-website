@@ -106,7 +106,6 @@ function expandBox(articleBox) {
     if (!isViewThrottled(articleId)) {
         registerView(articleId, loggedInUser.id)
     }
-    getReplies(articleId, 0)
 }
 
 function closeBox(articleBox) {
@@ -115,8 +114,6 @@ function closeBox(articleBox) {
     articleBox.classList.replace('article-box-expanded', 'article-box')
     const index = expandedBoxes.indexOf(articleBox)
     expandedBoxes.splice(index, 1)
-    replies = document.querySelectorAll(`.parent-article-id-${articleId}`)
-    replies.forEach(reply => reply.remove())
 }
 
 function addArticle(id, title, author, body) {
@@ -141,45 +138,6 @@ function addArticle(id, title, author, body) {
     expandHandler(newBox)
 }
 
-function addReply(direction, id_after, id, parent_article_id, author, body) {
-    const parent = document.getElementById(`${parent_article_id}`)
-    const newBox = articles.appendChild(document.createElement("div"))
-    const newBy = newBox.appendChild(document.createElement("div"))
-    const newAuthor = newBox.appendChild(document.createElement("div"))
-    const newBody = newBox.appendChild(document.createElement("div"))
-    const newId = newBox.appendChild(document.createElement("div"))
-    newBox.classList.add('reply')
-    newBox.classList.add('article-box-expanded')
-    newBy.classList.add('article-by')
-    newAuthor.classList.add('article-author')
-    newBody.classList.add('article-body')
-    newId.classList.add('article-id')
-    newBy.textContent = 'by '
-    newAuthor.textContent = author
-    newBody.innerText = body
-    newId.textContent = id
-    newBox.classList.add(`parent-article-id-${parent_article_id}`)
-    const idAfter = document.getElementById(`${id_after}`)
-    idAfter.insertAdjacentElement(direction, newBox)
-}
-
-function addShowMoreBox(parent_article_id) {
-    const parent = document.getElementById(`${parent_article_id}`)
-    const newBox = articles.appendChild(document.createElement("div"))
-    const newBody = newBox.appendChild(document.createElement("div"))
-    const currentPageCount = newBox.appendChild(document.createElement("div"))
-    newBox.classList.add('reply')
-    newBox.classList.add('article-box-expanded')
-    newBody.classList.add('article-body')
-    currentPageCount.classList.add('article-id')
-    newBody.innerText = 'Show Newer Replies'
-    newBox.classList.add(`parent-article-id-${parent_article_id}`)
-    newBox.id = `show-more-${parent_article_id}`
-    currentPageCount.textContent = 0
-    parent.insertAdjacentElement('afterend', newBox)
-    showMoreHandler(newBox, parent_article_id)
-}
-
 async function getRecentArticles(offset) {
     const response = await fetch(`/api/articles/recent/${offset}`);
     const fetchedArticles = await response.json();
@@ -195,40 +153,6 @@ async function getTopArticles(offset) {
         addArticle(article.id, article.title, article.user.username, article.body)
     })
 }
-
-async function getReplies(parent_article_id, offset) {
-  const response = await fetch(`/api/articles/findReplies/${parent_article_id}/${offset}`)
-  const results = await response.json();
-  const countRequest = await fetch(`/api/articles/countReplies/${parent_article_id}`)
-  const countResults = await countRequest.json();
-  const remainingCount = countResults.count - ((offset+1)*50)
-  const showMoreBox = document.getElementById(`show-more-${parent_article_id}`)
-  if (remainingCount > 0 && !showMoreBox) {
-    addShowMoreBox(parent_article_id)
-  }
-  if (offset > 0) {
-    results.forEach(reply=> {
-      addReply('beforebegin', showMoreBox.id, reply.id, parent_article_id, reply.user.username, reply.body)
-    })
-  } else {
-    results.reverse().forEach(reply=> {
-      addReply('afterend', parent_article_id, reply.id, parent_article_id, reply.user.username, reply.body)
-    })
-  }
-  if (remainingCount <= 0 && showMoreBox) {
-    showMoreBox.remove()
-  }
-}
-
-function showMoreHandler(showMoreBox, parent_article_id) {
-    showMoreBox.addEventListener('click', (e) => {
-        e.preventDefault();
-        const boxCount = showMoreBox.querySelector('.article-id')
-        const newCount = parseInt(boxCount.textContent) + 1
-        getReplies(parent_article_id, newCount)
-        boxCount.textContent = newCount
-      });
-} 
 
 async function getNextArticles() {
   pageCounter += 1;
