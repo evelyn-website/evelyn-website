@@ -95,7 +95,6 @@ editProfileForm.addEventListener("submit", async (event) => {
 
     await putData('/api/userProfiles/bySignedInUser', data)
     .catch((error) => {
-    console.log(error)
     console.error("Error:", error);
     });
     window.location.href = '/myprofile'; 

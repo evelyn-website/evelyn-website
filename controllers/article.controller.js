@@ -324,9 +324,6 @@ exports.findReplies = (req, res) => {
 }
 
 
-
-
-
 // Find a single Article with an id
 exports.findOne = (req, res) => {
     const id = req.params.id;

@@ -80,6 +80,17 @@ app.get('/profiles/:username/get-username', async (req, res) => {
   res.json({ username });
 });
 
+// Articles
+
+app.get('/articles/:id', function(req, res) {
+  res.sendFile('article-template.html', {root: './pages/articles'})
+})
+
+app.get('/articles/:id/get-article-id', async (req, res) => {
+  const id = req.params.id;
+  res.json({ id });
+});
+
 
 require("./routes/user.routes")(app);
 require("./routes/userProfile.routes")(app);

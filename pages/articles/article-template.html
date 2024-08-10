@@ -26,8 +26,7 @@
             position: fixed;
             opacity: 60%;
             height: 100vh;
-            min-width: 80%;
-            width: fit-content;
+            width: 80%;
         }
         .link-sidebar{
             position: fixed;
@@ -43,13 +42,13 @@
             flex-direction: column;
         }
         .link-box{
+            /* background-color: #f2daf2; */
             background-color: #f7f797;
             border-radius: 5px;
             border: 2px solid;
             min-height: 15px;
             height: fit-content;
-            min-width: 75%;
-            width: fit-content;
+            width: 75%;
             padding: 10%;
             margin: 5%;
             font-family: Arial, Helvetica, sans-serif;
@@ -57,14 +56,14 @@
             box-shadow: 5px 2.5px 2.5px black;
         }
         .link-box:hover {
+            /* background-color: #d4a9d4; */
             background-color: #d9d948;
             cursor: pointer;
             border-radius: 5px;
             border: 2px solid;
             min-height: 20px;
             height: fit-content;
-            min-width: 75%;
-            width: fit-content;
+            width: 75%;
             padding: 10%;
             margin: 5%;
             font-family: Arial, Helvetica, sans-serif;
@@ -78,8 +77,7 @@
             border: 2px solid;
             min-height: 20px;
             height: fit-content;
-            min-width: 75%;
-            width: fit-content;
+            width: 75%;
             padding: 10%;
             margin: 5%;
             font-family: Arial, Helvetica, sans-serif;
@@ -95,25 +93,6 @@
             align-items: start;
             flex-direction: column;
         }
-        .article-box{
-            /* background-color: #f069f0; */
-            background-color: #fce917;
-            border-radius: 5px;
-            height: auto;
-            width: fit-content;
-            min-width: 25%;
-            padding: 15px;
-            margin: 10px;
-            font-family: Arial, Helvetica, sans-serif;
-            box-shadow: 5px 2.5px 2.5px black;
-        }
-        .article-box:hover{
-            background-color: #ebd913;
-        }
-        .article-box:active{
-            background-color: #ebd913;
-            box-shadow: 10px 5px 5px black;
-        }
         .article-box-expanded{
             background-color: #fce917;
             border-radius: 5px;
@@ -124,13 +103,7 @@
             margin: 10px;
             font-family: Arial, Helvetica, sans-serif;
             box-shadow: 5px 2.5px 2.5px black;
-        }
-        .article-box-expanded:hover{
-            background-color: #ebd913;
-        }
-        .article-box-expanded:active{
-            background-color: #ebd913;
-            box-shadow: 10px 5px 5px black;
+
         }
         .article-title{
             font-family: Arial, Helvetica, sans-serif;
@@ -138,10 +111,6 @@
             width: fit-content;
             vertical-align: top;
             text-decoration: underline;
-        }
-        .article-title-clickable:hover{
-            cursor: pointer;
-            font-weight: bold;
         }
         .article-by{
             font-family: Arial, Helvetica, sans-serif;
@@ -155,19 +124,59 @@
             text-align: left;
             display: inline
         }
-        .article-author-clickable:hover{
-            cursor: pointer;
+        .article-author:hover{
             font-weight: bold;
+            text-decoration: underline;
+            cursor: pointer;
         }
         .article-body-hidden{
             display: none
         }
         .article-body{
             font-family: Arial, Helvetica, sans-serif;
-            overflow-wrap: anywhere;
+            overflow-wrap: break-word;
         }
         .article-id{
             display: none;
+        }
+    </style>
+    <style>
+        .page-article-box{
+            background-color: #fce917;
+            border-radius: 30px;
+            border: 5px solid;
+            min-height: 50%;
+            height: auto;
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            margin: 10px;
+        }
+        .page-article-box-title{
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bolder;
+            font-size: xx-large;
+            word-break: break-all;
+            margin: 3%;
+        }
+        .page-article-box-body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            font-size: large;
+            margin-top: 5%;
+            margin-left: 3%;
+        }
+        .page-article-box-author {
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            font-size: large;
+            margin-left: 3%;
+            display: inline-block;
+        }
+        .page-article-box-author:hover{
+            cursor: pointer;
+            text-decoration: underline;
         }
     </style>
     <style>
@@ -209,7 +218,7 @@
             width: 40%;
             height: 30px;
         }
-        textarea {
+        .post-textarea {
             background: #f7f797;
             font-size: 14px;
             font-family: Arial, Helvetica, sans-serif;
@@ -219,23 +228,24 @@
             margin-left: 3%;
             margin-top: 1%;
             width: 70%;
+            max-width: 90%;
             height: 100px;
         }
-        .submit-button {
+        .post-submit-button {
             background: #f7f797;
             border: 2px solid;
             border-radius: 10px;
             color: #000000;
             cursor: pointer;
             font-size: 20px;
+            font-family: Arial, Helvetica, sans-serif;
             font-weight: 700;
             margin-top: 2%;
             margin-left: 3%;
             width: 70%;
             height: 30px;
-
         }
-        .submit-button:hover {
+        .post-submit-button:hover {
             background: #d9d948;
             border: 2px solid;
             border-radius: 10px;
@@ -248,7 +258,7 @@
             width: 70%;
             height: 30px;
         }
-        .submit-button:active {
+        .post-submit-button:active {
             background: #d9d948;
             border: 2px solid;
             border-radius: 10px;
@@ -274,27 +284,28 @@
     <div class="link-sidebar">
         <div class= "link-box" onclick="location.href='/'" style="display: none"> Home </div>
         <div class="link-box" id="my-profile-link" style="display: none">My Profile</div>
-        <div id="sort-button" class="link-box" style="display: none" >Sort by Popular</div>
-        <div id="open-post-menu-button" class="link-box" style="display: none">New Article</div>
+        <div id="open-post-menu-button" class="link-box" style="display: none">Add Reply</div>
         <div id="logout-button" class="link-box" style="display: none">Log out</div>
     </div>
     <div class="content">
         <div class="opacity-background" style="display: none"></div>
         <div class="post-modal" style="display: none;">
-            <div class="post-form-header">New Article:</div>
+            <div class="post-form-header">New Reply:</div>
             <form class="post-form">
-                <div style="margin-left: 3%;">Title:</div>
-                <input id="title" type="text">
                 <div style="margin-left: 3%; margin-top: 1%;">Body:</div>
-                <textarea id="body"></textarea>
-                <button class="submit-button" id="submit" type="submit">Submit</button>
+                <textarea class="post-textarea" id="body"></textarea>
+                <button class="post-submit-button" id="submit-article" type="submit">Submit</button>
                 <div class="bad-input-warning" style="display: none"></div>
             </form>
         </div>
-        
+        <div class="page-article-box">
+            <div class="page-article-box-title"></div>
+            <div class="page-article-box-author"></div>
+            <div class="page-article-box-body"></div>
+        </div>
         <div class="articles" id="articles"></div>
     </div>
     </div>
 </body>
-<script src="/feed/feed.js"></script>
+<script src="/articles/article.js"></script>
 </html>

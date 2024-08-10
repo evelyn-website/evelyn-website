@@ -69,6 +69,15 @@ function profileLinkHandler(author) {
   author.classList.add('article-author-clickable')
 }
 
+function articleLinkHandler(title) {
+  title.addEventListener('click', (e) => {
+    e.preventDefault();
+    const box = title.parentNode
+    window.location.href = `/articles/${box.id}`
+  })
+  title.classList.add('article-title-clickable')
+}
+
 const myProfileLink = document.getElementById('my-profile-link')
 
 myProfileLink.addEventListener('click', (e) => {
@@ -102,7 +111,9 @@ function expandBox(articleBox) {
     expandedBoxes.push(articleBox)
     articleId = articleBox.querySelector('.article-id').textContent
     articleAuthor = articleBox.querySelector('.article-author')
+    articleTitle = articleBox.querySelector('.article-title')
     profileLinkHandler(articleAuthor)
+    articleLinkHandler(articleTitle)
     if (!isViewThrottled(articleId)) {
         registerView(articleId, loggedInUser.id)
     }
@@ -134,6 +145,7 @@ function addArticle(id, title, author, body) {
     newAuthor.textContent = author
     newBody.innerText = body
     newId.textContent = id
+    newBox.id = id
     expandHandler(newBox)
 }
 

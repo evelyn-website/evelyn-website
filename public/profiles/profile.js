@@ -103,7 +103,9 @@ function expandHandler(articleBox) {
         if (expandedBoxes.includes(articleBox)) {
             closeBox(articleBox);
         } else {
-            expandBox(articleBox)
+          expandBox(articleBox)
+          title = articleBox.querySelector('.article-title')
+          articleLinkHandler(title)
         }
       });
 } 
@@ -164,7 +166,17 @@ function addArticle(id, title, author, body) {
     newAuthor.textContent = author
     newBody.innerText = body
     newId.textContent = id
+    newBox.id = id
     expandHandler(newBox)
+}
+
+function articleLinkHandler(title) {
+  title.addEventListener('click', (e) => {
+    e.preventDefault();
+    const box = title.parentNode
+    window.location.href = `/articles/${box.id}`
+  })
+  title.classList.add('article-title-clickable')
 }
 
 async function getRecentArticlesForUser(offset, userId) {
@@ -349,8 +361,7 @@ profileSubmitButton.addEventListener('click', async (e) => {
         editing = false;
         loadProfile(userProfile)
     .catch((error) => {
-    console.log(error)
-    console.error("Error:", error);
+      console.error("Error:", error);
     });
 })
 
