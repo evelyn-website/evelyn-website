@@ -1,0 +1,39 @@
+{
+  "name": "evelyn-website",
+  "version": "1.0.0",
+  "description": "This website is for me and my friends",
+  "main": "index.js",
+  "scripts": {
+    "test": "console.log(\"Evelyn Website\")"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evelyn-nelson/evelyn-website.git"
+  },
+  "author": "Evelyn Nelson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/evelyn-nelson/evelyn-website/issues"
+  },
+  "homepage": "https://github.com/evelyn-nelson/evelyn-website#readme",
+  "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.515.0",
+    "aws-sdk": "^2.1564.0",
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.2.0",
+    "hash-util": "^0.1.0",
+    "js-cookie": "^3.0.5",
+    "jsonwebtoken": "^9.0.2",
+    "node-fetch": "^3.3.2",
+    "nodemailer": "^6.9.13",
+    "nodemon": "^3.0.2",
+    "path": "^0.12.7",
+    "pg": "^8.11.3",
+    "sequelize": "^6.37.2",
+    "sequelize-cli": "^6.6.2"
+  }
+}

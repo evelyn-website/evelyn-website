@@ -1,0 +1,19 @@
+INCIDENT REPORTS
+
+4/12/2024
+added express-rate-limit, but somehow node on the ec2 instance was on like v12 instead of v20, so it couldn't run.
+i got frustrated trying to install newer versions, so i tried uninstalling and using nvm.
+what followed was a huge mess of trying to figure out how to get the service to use the correct path, couldn't figure it out.
+
+eventually i tried homebrew which REALLY didn't work. i had to shut down and restart the instance completely, which actually gave it a new ip address, 
+which made it impossible to connect. i changed the ip address in my scripts and then also in the route 53 hosted zone.
+then i uninstalled homebrew, then went to the tutorial i used to set up in the first place to find this solution
+
+solution:
+sudo apt update
+sudo apt upgrade
+
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+

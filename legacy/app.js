@@ -49,44 +49,42 @@ app.use(globalRateLimiter);
 
 // Homepages
 
-app.get('/login', function (req, res) {
-  res.sendFile('login.html',  {root: './pages/login'});
-})
+app.get("/login", function (req, res) {
+  res.sendFile("login.html", { root: "./pages/login" });
+});
 
-app.get('/', function (req,res) {
-  res.sendFile('feed.html', {root: './pages/feed'});
-})
+app.get("/", function (req, res) {
+  res.sendFile("feed.html", { root: "./pages/feed" });
+});
 
 // Auth Pages
 
-app.get('/reset-password', function (req, res) {
-  res.sendFile('reset_password.html', {root: './pages/password-reset'})
-})
+app.get("/reset-password", function (req, res) {
+  res.sendFile("reset_password.html", { root: "./pages/password-reset" });
+});
 
-app.get('/change-password', function (req, res) {
-  res.sendFile('change_password.html', {root: './pages/password-reset'})
-})
-
-
+app.get("/change-password", function (req, res) {
+  res.sendFile("change_password.html", { root: "./pages/password-reset" });
+});
 
 // Profiles
 
-app.get('/profiles/:username', function(req, res) {
-  res.sendFile('profile-template.html', {root: './pages/profiles'})
-})
+app.get("/profiles/:username", function (req, res) {
+  res.sendFile("profile-template.html", { root: "./pages/profiles" });
+});
 
-app.get('/profiles/:username/get-username', async (req, res) => {
+app.get("/profiles/:username/get-username", async (req, res) => {
   const username = req.params.username;
   res.json({ username });
 });
 
 // Articles
 
-app.get('/articles/:id', function(req, res) {
-  res.sendFile('article-template.html', {root: './pages/articles'})
-})
+app.get("/articles/:id", function (req, res) {
+  res.sendFile("article-template.html", { root: "./pages/articles" });
+});
 
-app.get('/articles/:id/get-article-id', async (req, res) => {
+app.get("/articles/:id/get-article-id", async (req, res) => {
   const id = req.params.id;
   res.json({ id });
 });

@@ -1,0 +1,16 @@
+List of used routes for normal application
+
+articleViews/forUser
+articles/forUser
+articles/recent
+articles/recentForUser
+articles/topAllTime
+articles/topAllTimeForUser
+users/:userId (think about redesigning this one, do we really need to let them get emails?)
+users/fromJWT
+
+post articlesViews/forUser
+post articles/forUser
+put userProfiles/bySignedInUser
+
+auth routes
