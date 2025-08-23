@@ -21,49 +21,49 @@ module.exports = (app) => {
   } = require("../middleware/ratelimit.js");
 
   // User registration
-  router.post(
-    "/register",
-    [normalCreateRateLimit, extremeCreateRateLimit],
-    async (req, res) => {
-      try {
-        // Validate request
-        if (!req.body.username) {
-          res.status(400).send({
-            message: "Content can not be empty!",
-          });
-          return;
-        }
+  // router.post(
+  //   "/register",
+  //   [normalCreateRateLimit, extremeCreateRateLimit],
+  //   async (req, res) => {
+  //     try {
+  //       // Validate request
+  //       if (!req.body.username) {
+  //         res.status(400).send({
+  //           message: "Content can not be empty!",
+  //         });
+  //         return;
+  //       }
 
-        // Create a User
-        const user = {
-          username: req.body.username.trim(),
-          email: req.body.email.trim(),
-          password: req.body.password.trim(),
-        };
+  //       // Create a User
+  //       const user = {
+  //         username: req.body.username.trim(),
+  //         email: req.body.email.trim(),
+  //         password: req.body.password.trim(),
+  //       };
 
-        let salt = bcrypt.genSaltSync(10);
-        user.password = bcrypt.hashSync(user.password, salt);
+  //       let salt = bcrypt.genSaltSync(10);
+  //       user.password = bcrypt.hashSync(user.password, salt);
 
-        const savedUser = await User.create(user);
-        // Create the userProfile alongside the User
-        const userProfile = await UserProfile.create({
-          userId: savedUser.id,
-        });
+  //       const savedUser = await User.create(user);
+  //       // Create the userProfile alongside the User
+  //       const userProfile = await UserProfile.create({
+  //         userId: savedUser.id,
+  //       });
 
-        const userPermission = await UserPermission.create({
-          userId: savedUser.id,
-          permissions: {},
-        });
-        responseUser = { user: savedUser.username, email: savedUser.email };
-        res.status(200).send(responseUser);
-      } catch (err) {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while creating the user.",
-        });
-      }
-    }
-  );
+  //       const userPermission = await UserPermission.create({
+  //         userId: savedUser.id,
+  //         permissions: {},
+  //       });
+  //       responseUser = { user: savedUser.username, email: savedUser.email };
+  //       res.status(200).send(responseUser);
+  //     } catch (err) {
+  //       res.status(500).send({
+  //         message:
+  //           err.message || "Some error occurred while creating the user.",
+  //       });
+  //     }
+  //   }
+  // );
 
   // User login
   router.post(

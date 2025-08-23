@@ -1,47 +1,49 @@
-port = 3000
-const express = require('express');
-const path = require('path');
-const { globalRateLimiter } = require('./middleware/ratelimit')
-const cors = require('cors')
+port = 3000;
+const express = require("express");
+const path = require("path");
+const { globalRateLimiter } = require("./middleware/ratelimit");
+const cors = require("cors");
 
 const app = express();
 
-const numberOfProxies = 1
-app.set('trust proxy', numberOfProxies)
+const numberOfProxies = 1;
+app.set("trust proxy", numberOfProxies);
 
-app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded form data 
+app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded form data
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "public")));
 
-
-const cookieParser = require('cookie-parser');
+const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 
 const corsOptions = {
-  origin: ['https://evelynwebsite.com', 'http://localhost:3000']
-}
-app.use(cors(corsOptions))
+  origin: [
+    "https://legacy.evelynwebsite.com",
+    "https://evelynwebsite.com",
+    "http://localhost:3000",
+  ],
+};
+app.use(cors(corsOptions));
 
 // Standard auth middleware
 app.use((req, res, next) => {
-  console.log('forwarded-for', req.headers['x-forwarded-for'])
+  console.log("forwarded-for", req.headers["x-forwarded-for"]);
   try {
     const token = req.cookies.jwt;
     if (token) {
-      req.header('Authorization', `Bearer ${token}`); 
+      req.header("Authorization", `Bearer ${token}`);
       req.token = token;
-    }   
+    }
     next();
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
 // Rate Limiting
 
-app.use(globalRateLimiter)
-
+app.use(globalRateLimiter);
 
 // Routes
 
@@ -49,14 +51,13 @@ app.use(globalRateLimiter)
 
 app.get('/login', function (req, res) {
   res.sendFile('login.html',  {root: './pages/login'});
-});
+})
 
 app.get('/', function (req,res) {
   res.sendFile('feed.html', {root: './pages/feed'});
 })
 
 // Auth Pages
-
 
 app.get('/reset-password', function (req, res) {
   res.sendFile('reset_password.html', {root: './pages/password-reset'})
@@ -65,7 +66,6 @@ app.get('/reset-password', function (req, res) {
 app.get('/change-password', function (req, res) {
   res.sendFile('change_password.html', {root: './pages/password-reset'})
 })
-
 
 
 
@@ -90,7 +90,6 @@ app.get('/articles/:id/get-article-id', async (req, res) => {
   const id = req.params.id;
   res.json({ id });
 });
-
 
 require("./routes/user.routes")(app);
 require("./routes/userProfile.routes")(app);
