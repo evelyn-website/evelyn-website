@@ -234,20 +234,6 @@ function Home() {
           </li>
         </ul>
       </section>
-
-      <section className="section legacy-note">
-        <h3>looking for the old evelyn website?</h3>
-        <p>
-          my original social media site is still live at{" "}
-          <a
-            href="https://legacy.evelynwebsite.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            legacy.evelynwebsite.com
-          </a>
-        </p>
-      </section>
     </>
   );
 }
