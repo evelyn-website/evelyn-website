@@ -263,7 +263,7 @@
 
 /* Contact section links */
 #contact ul {
-  padding: 0;
+  padding: 0 0 0 1.25rem;
   margin: 1rem 0;
 }
 
